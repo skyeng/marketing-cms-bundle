@@ -1,0 +1,43 @@
+{
+  "name": "skyeng/marketing-cms-bundle",
+  "description": "Marketing CMS Bundle",
+  "type": "symfony-bundle",
+  "require": {
+    "php": "^7.3.3",
+    "easycorp/easyadmin-bundle": "^3.2",
+    "psr/http-message": "*",
+    "ramsey/uuid": "^4.1",
+    "ramsey/uuid-doctrine": "^1.6",
+    "symfony/validator": "4.4.*"
+  },
+  "require-dev": {
+    "codeception/codeception": "^2.5",
+    "doctrine/doctrine-fixtures-bundle": "^3.4",
+    "doctrine/doctrine-migrations-bundle": "^3.0",
+    "nelmio/api-doc-bundle": "^3.6"
+  },
+  "suggest": {
+    "nelmio/api-doc-bundle": "Highly recommended for api documentation"
+  },
+  "autoload": {
+    "psr-4": {
+      "Skyeng\\MarketingCmsBundle\\": "src/",
+      "DoctrineMigrations\\": "src/Infrastructure/Doctrine/Migrations/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Skyeng\\MarketingCmsBundle\\Tests\\": [
+        "tests/",
+        "tests/_support/"
+      ],
+      "Skyeng\\MarketingCmsBundle\\Tests\\Api\\": "tests/api/",
+      "Skyeng\\MarketingCmsBundle\\Tests\\Functional\\": "tests/functional/",
+      "Skyeng\\MarketingCmsBundle\\Tests\\Integrational\\": "tests/integrational/",
+      "Skyeng\\MarketingCmsBundle\\Tests\\Unit\\": "tests/unit/"
+    }
+  },
+  "config": {
+    "sort-packages": true
+  }
+}

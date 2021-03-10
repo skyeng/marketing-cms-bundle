@@ -1,0 +1,11 @@
+Skyeng\MarketingCmsBundle\Domain\Entity\Resource:
+  constraints:
+    - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: uri
+  properties:
+    uri:
+      - Regex: '~^/.{1,}$~'
+
+Skyeng\MarketingCmsBundle\Domain\Entity\File:
+  properties:
+    resource:
+      - Valid: ~

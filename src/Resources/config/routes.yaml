@@ -1,0 +1,3 @@
+controllers:
+  resource: ../../UI/Controller
+  type: annotation

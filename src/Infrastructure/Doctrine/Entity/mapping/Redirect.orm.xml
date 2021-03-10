@@ -1,0 +1,18 @@
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="Skyeng\MarketingCmsBundle\Domain\Entity\Redirect" table="cms_redirect"
+            repository-class="Skyeng\MarketingCmsBundle\Infrastructure\Doctrine\Repository\RedirectRepository">
+        <id name="id" type="cms_id"/>
+        <one-to-one field="resource" target-entity="Skyeng\MarketingCmsBundle\Domain\Entity\Resource" orphan-removal="true">
+            <cascade>
+                <cascade-persist/>
+            </cascade>
+        </one-to-one>
+        <field name="targetUrl" type="text"/>
+        <field name="httpCode" type="integer"/>
+    </entity>
+
+</doctrine-mapping>

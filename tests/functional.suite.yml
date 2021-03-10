@@ -1,0 +1,13 @@
+actor: FunctionalTester
+modules:
+  enabled:
+    - \Skyeng\MarketingCmsBundle\Tests\Helper\Functional
+    - Symfony:
+        app_path: '../src'
+        var_path: '../var'
+        environment: 'test'
+    - Doctrine2:
+        depends: Symfony
+        cleanup: true
+        environment: 'test'
+    - Asserts:
