@@ -1,0 +1,46 @@
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="Skyeng\MarketingCmsBundle\Domain\Entity\Page" table="cms_page"
+            repository-class="Skyeng\MarketingCmsBundle\Infrastructure\Doctrine\Repository\PageRepository">
+        <id name="id" type="cms_id"/>
+        <one-to-one field="resource" target-entity="Skyeng\MarketingCmsBundle\Domain\Entity\Resource" orphan-removal="true">
+            <cascade>
+                <cascade-persist/>
+            </cascade>
+        </one-to-one>
+        <field name="title"/>
+        <field name="isPublished" type="boolean"/>
+        <field name="publishedAt" type="datetime" nullable="true"/>
+        <field name="createdAt" type="datetime"/>
+        <field name="updatedAt" type="datetime"/>
+
+        <one-to-one field="pageSeoData" target-entity="Skyeng\MarketingCmsBundle\Domain\Entity\PageSeoData" mapped-by="page">
+            <cascade>
+                <cascade-persist/>
+                <cascade-remove/>
+            </cascade>
+        </one-to-one>
+        <one-to-one field="pageOpenGraphData" target-entity="Skyeng\MarketingCmsBundle\Domain\Entity\PageOpenGraphData" mapped-by="page">
+            <cascade>
+                <cascade-persist/>
+                <cascade-remove/>
+            </cascade>
+        </one-to-one>
+        <one-to-many field="customMetaTags" target-entity="Skyeng\MarketingCmsBundle\Domain\Entity\PageCustomMetaTag" mapped-by="page" orphan-removal="true">
+            <cascade>
+                <cascade-persist/>
+                <cascade-remove/>
+            </cascade>
+        </one-to-many>
+        <one-to-many field="components" target-entity="Skyeng\MarketingCmsBundle\Domain\Entity\PageComponent" mapped-by="page" orphan-removal="true">
+            <cascade>
+                <cascade-persist/>
+                <cascade-remove/>
+            </cascade>
+        </one-to-many>
+    </entity>
+
+</doctrine-mapping>
