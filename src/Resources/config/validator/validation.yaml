@@ -12,7 +12,7 @@ Skyeng\MarketingCmsBundle\Domain\Entity\File:
 
 # Page
 
-App\Bundle\CmsBundle\Domain\Entity\PageComponent:
+Skyeng\MarketingCmsBundle\Domain\Entity\PageComponent:
   constraints:
     - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
         fields: [page, order]
@@ -23,12 +23,12 @@ App\Bundle\CmsBundle\Domain\Entity\PageComponent:
       - NotBlank: ~
       - Positive: ~
 
-App\Bundle\CmsBundle\Domain\Entity\PageCustomMetaTag:
+Skyeng\MarketingCmsBundle\Domain\Entity\PageCustomMetaTag:
   properties:
     content:
       - NotBlank: ~
 
-App\Bundle\CmsBundle\Domain\Entity\Page:
+Skyeng\MarketingCmsBundle\Domain\Entity\Page:
   properties:
     resource:
       - Valid: ~
