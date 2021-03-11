@@ -9,3 +9,30 @@ Skyeng\MarketingCmsBundle\Domain\Entity\File:
   properties:
     resource:
       - Valid: ~
+
+# Page
+
+App\Bundle\CmsBundle\Domain\Entity\PageComponent:
+  constraints:
+    - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
+        fields: [page, order]
+        errorPath: order
+        message: 'Это значение уже используется для этой страницы'
+  properties:
+    order:
+      - NotBlank: ~
+      - Positive: ~
+
+App\Bundle\CmsBundle\Domain\Entity\PageCustomMetaTag:
+  properties:
+    content:
+      - NotBlank: ~
+
+App\Bundle\CmsBundle\Domain\Entity\Page:
+  properties:
+    resource:
+      - Valid: ~
+    components:
+      - Valid: ~
+    customMetaTags:
+      - Valid: ~
