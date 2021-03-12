@@ -24,4 +24,9 @@ class Uri
     {
         return mb_substr($this->value, 1);
     }
+
+    public function getFileName(): string
+    {
+        return basename($this->value);
+    }
 }

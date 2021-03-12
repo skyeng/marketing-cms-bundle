@@ -14,7 +14,7 @@ class GetFileV1ResultAssembler implements GetFileV1ResultAssemblerInterface
         return new GetFileV1ResultDto(
             $file->getContent(),
             $file->getContentType()->getValue(),
-            $file->getResource()->getUri()->getPathname(),
+            $file->getResource()->getUri()->getFileName(),
             $file->getCacheTime()->getValue(),
         );
     }
