@@ -9,3 +9,8 @@ Skyeng\MarketingCmsBundle\Domain\Entity\File:
   properties:
     resource:
       - Valid: ~
+
+Skyeng\MarketingCmsBundle\Domain\Entity\Redirect:
+  properties:
+    resource:
+      - Valid: ~
