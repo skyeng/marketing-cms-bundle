@@ -8,7 +8,7 @@ use Skyeng\MarketingCmsBundle\Domain\Entity\PageComponent;
 use Skyeng\MarketingCmsBundle\Domain\Entity\ValueObject\PageComponentName;
 use Skyeng\MarketingCmsBundle\Domain\Repository\PageComponentRepository\PageComponentRepositoryInterface;
 use Skyeng\MarketingCmsBundle\Infrastructure\Symfony\Form\ComponentTypes\HTMLComponentType;
-use Skyeng\MarketingCmsBundle\Infrastructure\Doctrine\Type\PageComponentNameType;
+use Skyeng\MarketingCmsBundle\Infrastructure\Symfony\Form\PageComponentNameType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
