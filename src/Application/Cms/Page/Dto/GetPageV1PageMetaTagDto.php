@@ -29,7 +29,7 @@ class GetPageV1PageMetaTagDto
      */
     public $content;
 
-    public function __construct(?string $name, ?string $property, string $content)
+    public function __construct(?string $name, ?string $property, ?string $content)
     {
         $this->name = $name;
         $this->property = $property;
