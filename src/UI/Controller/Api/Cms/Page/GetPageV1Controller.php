@@ -6,6 +6,7 @@ namespace Skyeng\MarketingCmsBundle\UI\Controller\Api\Cms\Page;
 
 use Skyeng\MarketingCmsBundle\Application\Cms\Page\PageService;
 use Skyeng\MarketingCmsBundle\Application\Cms\Page\Dto\GetPageV1RequestDto;
+use Skyeng\MarketingCmsBundle\Domain\Repository\PageRepository\Exception\PageNotFoundException;
 use Skyeng\MarketingCmsBundle\UI\Controller\Api\Cms\Page\Validation\GetPageV1Form;
 use Skyeng\MarketingCmsBundle\Application\Exception\ValidationException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -80,8 +81,12 @@ class GetPageV1Controller extends AbstractController
             return ResponseFactory::createErrorResponse($request, $exception->getMessage(), $exception->getErrors());
         }
 
-        $result = $this->pageService->getPage($dto);
+        try {
+            $result = $this->pageService->getPage($dto);
 
-        return ResponseFactory::createOkResponse($request, $result);
+            return ResponseFactory::createOkResponse($request, $result);
+        } catch (PageNotFoundException $exception) {
+            return ResponseFactory::createErrorResponse($request, 'Page not found', []);
+        }
     }
 }
