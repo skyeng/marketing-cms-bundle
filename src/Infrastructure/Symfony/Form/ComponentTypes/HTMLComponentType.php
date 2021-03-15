@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Skyeng\MarketingCmsBundle\Infrastructure\Symfony\Form\ComponentTypes;
 
-use Doctrine\DBAL\Types\Type;
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-class HTMLComponentType extends Type implements DataTransformerInterface
+class HTMLComponentType extends AbstractType implements DataTransformerInterface
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {

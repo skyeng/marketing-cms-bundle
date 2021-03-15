@@ -6,13 +6,13 @@ namespace Skyeng\MarketingCmsBundle\Infrastructure\Symfony\Form;
 
 use Skyeng\MarketingCmsBundle\Domain\Entity\PageCustomMetaTag;
 use Skyeng\MarketingCmsBundle\Domain\Repository\PageCustomMetaTagRepository\PageCustomMetaTagRepositoryInterface;
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Doctrine\DBAL\Types\Type;
 
-class PageCustomMetaTagType extends Type
+class PageCustomMetaTagType extends AbstractType
 {
     /**
      * @var PageCustomMetaTagRepositoryInterface
