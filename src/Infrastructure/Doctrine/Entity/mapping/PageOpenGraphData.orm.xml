@@ -1,0 +1,21 @@
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="Skyeng\MarketingCmsBundle\Domain\Entity\PageOpenGraphData" table="cms_page_open_graph_data"
+            repository-class="Skyeng\MarketingCmsBundle\Infrastructure\Doctrine\Repository\PageOpenGraphDataRepository">
+        <id name="page" type="cms_id" association-key="true"/>
+        <one-to-one field="page" target-entity="Skyeng\MarketingCmsBundle\Domain\Entity\Page" inversed-by="pageOpenGraphData">
+            <cascade>
+                <cascade-persist/>
+            </cascade>
+        </one-to-one>
+        <field name="type" nullable="true"/>
+        <field name="url" nullable="true"/>
+        <field name="title" nullable="true"/>
+        <field name="description" type="text" nullable="true"/>
+        <field name="image" type="text" nullable="true"/>
+    </entity>
+
+</doctrine-mapping>

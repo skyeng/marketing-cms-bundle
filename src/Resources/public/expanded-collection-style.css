@@ -1,0 +1,19 @@
+.expanded-collection .form-widget {
+    flex: 0 0 100%;
+}
+
+.expanded-collection .form-widget .form-widget-compound {
+    width: 100%;
+}
+
+.expanded-collection .form-widget input.form-control, .form-widget select.form-control, .form-widget textarea.form-control {
+    max-width: 100%;
+}
+
+.expanded-collection .form-widget-compound .form-group {
+    padding: 2px;
+}
+
+.expanded-collection .select2-selection {
+    max-width: 100%;
+}

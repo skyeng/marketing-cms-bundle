@@ -11,10 +11,12 @@ class ResourceType
 {
     public const FILE_TYPE = 'file';
     public const REDIRECT_TYPE = 'redirect';
+    public const PAGE_TYPE = 'page';
 
     public const AVAILABLE_TYPES = [
         self::FILE_TYPE => self::FILE_TYPE,
         self::REDIRECT_TYPE => self::REDIRECT_TYPE,
+        self::PAGE_TYPE => self::PAGE_TYPE,
     ];
 
     use ValueObjectTrait;
@@ -34,5 +36,10 @@ class ResourceType
     public function isRedirect(): bool
     {
         return $this->value === self::REDIRECT_TYPE;
+    }
+
+    public function isPage(): bool
+    {
+        return $this->value === self::PAGE_TYPE;
     }
 }
