@@ -48,3 +48,19 @@ https://confluence.skyeng.tech/x/SLMhBQ
 * Генерим миграции для сущностей CMS
 
   `bin/console make:migration`
+
+* Добавляем пункты меню в DashboardController easyadmin-а
+    ```php
+    use Skyeng\MarketingCmsBundle\Domain\Entity\File;
+    use Skyeng\MarketingCmsBundle\Domain\Entity\Redirect;
+  
+    class DashboardController extends AbstractDashboardController
+    {
+        public function configureMenuItems(): iterable
+        {
+            yield MenuItem::section('CMS');
+            yield MenuItem::linkToCrud('Файлы', 'fas fa-folder-open', File::class);
+            yield MenuItem::linkToCrud('Редиректы', 'fas fa-folder-open', Redirect::class);
+        }
+    }
+    ```
