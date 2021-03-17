@@ -27,19 +27,12 @@ class MediaFileCrudController extends AbstractCrudController
      */
     private $mediaCatalogRepository;
 
-    /**
-     * @var string
-     */
-    private $mediaUploadDestination;
-
     public function __construct(
         MediaFileRepositoryInterface $mediaFileRepository,
-        MediaCatalogRepositoryInterface $mediaCatalogRepository,
-        string $mediaUploadDestination
+        MediaCatalogRepositoryInterface $mediaCatalogRepository
     ) {
         $this->mediaFileRepository = $mediaFileRepository;
         $this->mediaCatalogRepository = $mediaCatalogRepository;
-        $this->mediaUploadDestination = $mediaUploadDestination;
     }
 
     public static function getEntityFqcn(): string
@@ -78,7 +71,7 @@ class MediaFileCrudController extends AbstractCrudController
             '',
             new MediaFileType(MediaFileType::IMAGE_TYPE),
             '',
-            new MediaFileStorage($this->mediaUploadDestination),
+            new MediaFileStorage(MediaFileStorage::NFS_STORAGE),
         );
     }
 }

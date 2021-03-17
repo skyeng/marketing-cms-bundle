@@ -1,6 +1,3 @@
-parameters:
-  media_upload_destination: '%vich_uploader.mappings.media_files.upload_destination%'
-
 services:
   _defaults:
     autowire: true
