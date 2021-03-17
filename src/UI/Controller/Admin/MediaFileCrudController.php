@@ -5,9 +5,12 @@ declare(strict_types=1);
 namespace Skyeng\MarketingCmsBundle\UI\Controller\Admin;
 
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Filter\ChoiceFilter;
+use EasyCorp\Bundle\EasyAdminBundle\Filter\EntityFilter;
 use Skyeng\MarketingCmsBundle\Domain\Entity\MediaFile;
 use Skyeng\MarketingCmsBundle\Domain\Entity\ValueObject\MediaFileStorage;
 use Skyeng\MarketingCmsBundle\Domain\Entity\ValueObject\MediaFileType;
@@ -38,6 +41,15 @@ class MediaFileCrudController extends AbstractCrudController
     public static function getEntityFqcn(): string
     {
         return MediaFile::class;
+    }
+
+    public function configureFilters(Filters $filters): Filters
+    {
+        return $filters
+//            ->add(EntityFilter::new('catalog', 'Каталог')) TODO Fix
+            ->add(
+                ChoiceFilter::new('type', 'Тип файла')->setChoices([MediaFileType::AVAILABLE_TYPES])
+            );
     }
 
     public function configureCrud(Crud $crud): Crud
