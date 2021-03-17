@@ -9,12 +9,12 @@ use Skyeng\MarketingCmsBundle\Domain\Traits\ValueObjectTrait;
 
 class MediaFileStorage
 {
-    public const S3_STORAGE = 's3';
-    public const LOCAL_STORAGE = 'local';
+    public const S3_STORAGE = 'uploads.s3';
+    public const NFS_STORAGE = 'uploads.nfs';
 
     public const AVAILABLE_STORAGES = [
         self::S3_STORAGE => self::S3_STORAGE,
-        self::LOCAL_STORAGE => self::LOCAL_STORAGE,
+        self::NFS_STORAGE => self::NFS_STORAGE,
     ];
 
     use ValueObjectTrait;
@@ -31,8 +31,8 @@ class MediaFileStorage
         return $this->value === self::S3_STORAGE;
     }
 
-    public function isLocal(): bool
+    public function isNfs(): bool
     {
-        return $this->value === self::LOCAL_STORAGE;
+        return $this->value === self::NFS_STORAGE;
     }
 }
