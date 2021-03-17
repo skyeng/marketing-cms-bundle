@@ -2,8 +2,6 @@ services:
   _defaults:
     autowire: true
     autoconfigure: true
-    bind:
-      $mediaUploadDestination: '%media_upload_destination%'
 
   Skyeng\MarketingCmsBundle\:
     resource: '../../*'
