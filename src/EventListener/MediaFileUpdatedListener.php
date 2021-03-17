@@ -28,12 +28,12 @@ class MediaFileUpdatedListener
         $this->fileMappingFactory = $fileMappingFactory;
     }
 
-    public function postUpdate(LifecycleEventArgs $args): void
+    public function preUpdate(LifecycleEventArgs $args): void
     {
         $this->handleEventArgs($args);
     }
 
-    public function postPersist(LifecycleEventArgs $args): void
+    public function prePersist(LifecycleEventArgs $args): void
     {
         $this->handleEventArgs($args);
     }
