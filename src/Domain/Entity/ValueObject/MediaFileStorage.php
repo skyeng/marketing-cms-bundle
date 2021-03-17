@@ -19,13 +19,6 @@ class MediaFileStorage
 
     use ValueObjectTrait;
 
-    protected function checkValue(string $value): void
-    {
-        if (!in_array($value, self::AVAILABLE_STORAGES)) {
-            throw new IncorrectValueObjectException('This media file storage is not supported');
-        }
-    }
-
     public function isS3(): bool
     {
         return $this->value === self::S3_STORAGE;

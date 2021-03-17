@@ -8,6 +8,7 @@ use Doctrine\Persistence\Event\LifecycleEventArgs;
 use Skyeng\MarketingCmsBundle\Application\Cms\MediaFile\Service\MediaFileTypeResolver;
 use Skyeng\MarketingCmsBundle\Domain\Entity\MediaFile;
 use Skyeng\MarketingCmsBundle\Domain\Entity\ValueObject\MediaFileStorage;
+use Vich\UploaderBundle\Mapping\PropertyMappingFactory;
 
 class MediaFileUpdatedListener
 {
@@ -17,14 +18,14 @@ class MediaFileUpdatedListener
     private $mediaFileTypeResolver;
 
     /**
-     * @var string
+     * @var PropertyMappingFactory
      */
-    private $mediaUploadDestination;
+    private $fileMappingFactory;
 
-    public function __construct(MediaFileTypeResolver $mediaFileTypeResolver, string $mediaUploadDestination)
+    public function __construct(MediaFileTypeResolver $mediaFileTypeResolver, PropertyMappingFactory $fileMappingFactory)
     {
         $this->mediaFileTypeResolver = $mediaFileTypeResolver;
-        $this->mediaUploadDestination = $mediaUploadDestination;
+        $this->fileMappingFactory = $fileMappingFactory;
     }
 
     public function postUpdate(LifecycleEventArgs $args): void
@@ -46,6 +47,8 @@ class MediaFileUpdatedListener
         }
 
         $object->setType($this->mediaFileTypeResolver->getMediaFileTypeByFile($object->getFile()));
-        $object->setStorage(new MediaFileStorage($this->mediaUploadDestination));
+
+        $mapping = $this->fileMappingFactory->fromField($object, 'file');
+        $object->setStorage(new MediaFileStorage($mapping->getUploadDestination()));
     }
 }
