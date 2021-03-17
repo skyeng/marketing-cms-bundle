@@ -1,7 +1,12 @@
+parameters:
+  media_upload_destination: '%vich_uploader.mappings.media_files.upload_destination%'
+
 services:
   _defaults:
     autowire: true
     autoconfigure: true
+    bind:
+      $mediaUploadDestination: '%media_upload_destination%'
 
   Skyeng\MarketingCmsBundle\:
     resource: '../../*'
@@ -11,3 +16,9 @@ services:
       - '../../Domain/{Exception,Traits,Entity,Event}'
       - '../../Domain/{Exception,Traits,Entity,Event}/*.php'
       - '../../Domain/{Exception,Traits,Entity,Event}/**/*.php'
+
+  marketing_cms_bundle.listener.media_file_updated_listener:
+    class: Skyeng\MarketingCmsBundle\EventListener\MediaFileUpdatedListener
+    tags:
+      - { name: doctrine.event_listener, event: postUpdate, method: postUpdate }
+      - { name: doctrine.event_listener, event: postPersist, method: postPersist }
