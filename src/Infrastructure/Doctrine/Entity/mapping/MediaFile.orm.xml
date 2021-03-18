@@ -16,6 +16,7 @@
         <field name="name" unique="true"/>
         <field name="type" type="media_file_type"/>
         <field name="storage" type="media_file_storage"/>
+        <field name="originalName"/>
     </entity>
 
 </doctrine-mapping>

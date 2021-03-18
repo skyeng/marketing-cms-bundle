@@ -46,14 +46,27 @@ class MediaFile
      */
     private $file;
 
-    public function __construct(Id $id, MediaCatalog $catalog, string $title, MediaFileType $type, string $name, MediaFileStorage $storage)
-    {
+    /**
+     * @var string|null
+     */
+    private $originalName;
+
+    public function __construct(
+        Id $id,
+        MediaCatalog $catalog,
+        string $title,
+        MediaFileType $type,
+        string $name,
+        MediaFileStorage $storage,
+        string $originalName
+    ) {
         $this->id = $id;
         $this->catalog = $catalog;
         $this->title = $title;
         $this->type = $type;
         $this->name = $name;
         $this->storage = $storage;
+        $this->originalName = $originalName;
     }
 
     public function getId(): Id
@@ -119,5 +132,15 @@ class MediaFile
     public function setFile(?File $file): void
     {
         $this->file = $file;
+    }
+
+    public function getOriginalName(): ?string
+    {
+        return $this->originalName;
+    }
+
+    public function setOriginalName(?string $originalName): void
+    {
+        $this->originalName = $originalName;
     }
 }

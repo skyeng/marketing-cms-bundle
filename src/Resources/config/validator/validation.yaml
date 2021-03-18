@@ -41,3 +41,14 @@ Skyeng\MarketingCmsBundle\Domain\Entity\Page:
       - Valid: ~
     customMetaTags:
       - Valid: ~
+
+# Media
+
+Skyeng\MarketingCmsBundle\Domain\Entity\MediaCatalog:
+  constraints:
+    - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: name
+
+Skyeng\MarketingCmsBundle\Domain\Entity\MediaFile:
+  properties:
+    file:
+      - File: { maxSize: 20M, mimeTypes: [ image/jpeg, image/png, image/gif, application/pdf, video/mp4 ] }

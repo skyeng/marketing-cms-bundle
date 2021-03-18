@@ -2,3 +2,4 @@ Skyeng\MarketingCmsBundle\Domain\Entity\MediaFile:
   file:
     mapping: media_files
     filename_property: name
+    original_name: originalName

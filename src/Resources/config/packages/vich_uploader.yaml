@@ -6,3 +6,4 @@ vich_uploader:
         media_files:
             uri_prefix: '%app.uploads_base_url%'
             upload_destination: 'uploads.nfs'
+            namer: Vich\UploaderBundle\Naming\OrignameNamer

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Skyeng\MarketingCmsBundle\UI\Controller\Admin;
 
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
@@ -34,6 +36,12 @@ class MediaCatalogCrudController extends AbstractCrudController
             ->setPageTitle(Crud::PAGE_DETAIL, 'Каталог')
             ->setPageTitle(Crud::PAGE_NEW, 'Создать каталог')
             ->setPageTitle(Crud::PAGE_EDIT, 'Каталог');
+    }
+
+    public function configureActions(Actions $actions): Actions
+    {
+        $actions->remove(Crud::PAGE_INDEX, Action::DELETE);
+        return $actions;
     }
 
     public function configureFields(string $pageName): iterable

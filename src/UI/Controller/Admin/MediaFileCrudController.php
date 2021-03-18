@@ -98,6 +98,10 @@ class MediaFileCrudController extends AbstractCrudController
         $actions->add(Crud::PAGE_INDEX, $getFileLink);
         $actions->add(Crud::PAGE_INDEX, $getFileHtml);
 
+        if (count($this->mediaCatalogRepository->getAll()) === 0) {
+            $actions->remove(Crud::PAGE_INDEX, Action::NEW);
+        }
+
         return $actions;
     }
 
@@ -111,12 +115,12 @@ class MediaFileCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         $title = TextField::new('title', 'Заголовок файла');
-        $name = TextField::new('name', 'Заголовок файла');
         $file = VichFileField::new('file', 'Файл');
         $catalog = AssociationField::new('catalog', 'Каталог');
+        $originalName = TextField::new('originalName', 'Название файла');
 
         if (in_array($pageName, [Crud::PAGE_INDEX, Crud::PAGE_DETAIL], true)) {
-            return [$name, $title, $catalog];
+            return [$originalName, $title, $catalog];
         }
 
         return [$catalog, $title, $file];
@@ -131,6 +135,7 @@ class MediaFileCrudController extends AbstractCrudController
             new MediaFileType(MediaFileType::IMAGE_TYPE),
             '',
             new MediaFileStorage(MediaFileStorage::NFS_STORAGE),
+            '',
         );
     }
 }
