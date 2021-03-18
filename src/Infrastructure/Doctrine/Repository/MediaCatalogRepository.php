@@ -34,4 +34,13 @@ class MediaCatalogRepository extends ServiceEntityRepository implements MediaCat
             throw new MediaCatalogRepositoryException($e->getMessage(), $e->getCode(), $e);
         }
     }
+
+    public function getFirst(): ?MediaCatalog
+    {
+        try {
+            return $this->findOneBy([], ['id' => 'desc']);
+        } catch (Exception $e) {
+            throw new MediaCatalogRepositoryException($e->getMessage(), $e->getCode(), $e);
+        }
+    }
 }

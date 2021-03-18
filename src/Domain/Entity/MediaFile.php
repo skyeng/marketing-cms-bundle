@@ -32,7 +32,7 @@ class MediaFile
     private $type;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $name;
 
@@ -56,7 +56,7 @@ class MediaFile
         MediaCatalog $catalog,
         string $title,
         MediaFileType $type,
-        string $name,
+        ?string $name,
         MediaFileStorage $storage,
         string $originalName
     ) {
@@ -109,7 +109,7 @@ class MediaFile
         return $this->name;
     }
 
-    public function setName(string $name): void
+    public function setName(?string $name): void
     {
         $this->name = $name;
     }
