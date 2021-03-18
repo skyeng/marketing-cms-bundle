@@ -14,6 +14,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\ChoiceFilter;
+use EasyCorp\Bundle\EasyAdminBundle\Filter\EntityFilter;
 use Skyeng\MarketingCmsBundle\Application\Cms\MediaFile\Service\MediaFilePathResolver;
 use Skyeng\MarketingCmsBundle\Domain\Entity\MediaFile;
 use Skyeng\MarketingCmsBundle\Domain\Entity\ValueObject\MediaFileStorage;
@@ -57,7 +58,6 @@ class MediaFileCrudController extends AbstractCrudController
     public function configureFilters(Filters $filters): Filters
     {
         return $filters
-//            ->add(EntityFilter::new('catalog', 'Каталог')) TODO Fix
             ->add(
                 ChoiceFilter::new('type', 'Тип файла')->setChoices([MediaFileType::AVAILABLE_TYPES])
             );
@@ -98,7 +98,7 @@ class MediaFileCrudController extends AbstractCrudController
         $actions->add(Crud::PAGE_INDEX, $getFileLink);
         $actions->add(Crud::PAGE_INDEX, $getFileHtml);
 
-        if (count($this->mediaCatalogRepository->getAll()) === 0) {
+        if ($this->mediaCatalogRepository->getFirst() === null) {
             $actions->remove(Crud::PAGE_INDEX, Action::NEW);
         }
 
@@ -130,7 +130,7 @@ class MediaFileCrudController extends AbstractCrudController
     {
         return new MediaFile(
             $this->mediaFileRepository->getNextIdentity(),
-            $this->mediaCatalogRepository->getAll()[0],
+            $this->mediaCatalogRepository->getFirst(),
             '',
             new MediaFileType(MediaFileType::IMAGE_TYPE),
             '',
