@@ -23,6 +23,6 @@ class MediaFileType extends Type
 
     public function getName(): string
     {
-        return 'media_file_type';
+        return 'cms_media_file_type';
     }
 }

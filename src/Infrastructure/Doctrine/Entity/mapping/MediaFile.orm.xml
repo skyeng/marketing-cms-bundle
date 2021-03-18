@@ -14,8 +14,8 @@
         </many-to-one>
         <field name="title"/>
         <field name="name" unique="true"/>
-        <field name="type" type="media_file_type"/>
-        <field name="storage" type="media_file_storage"/>
+        <field name="type" type="cms_media_file_type"/>
+        <field name="storage" type="cms_media_file_storage"/>
         <field name="originalName"/>
     </entity>
 

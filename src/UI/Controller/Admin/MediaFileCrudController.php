@@ -19,6 +19,7 @@ use Skyeng\MarketingCmsBundle\Application\Cms\MediaFile\Service\MediaFilePathRes
 use Skyeng\MarketingCmsBundle\Domain\Entity\MediaFile;
 use Skyeng\MarketingCmsBundle\Domain\Entity\ValueObject\MediaFileStorage;
 use Skyeng\MarketingCmsBundle\Domain\Entity\ValueObject\MediaFileType;
+use Skyeng\MarketingCmsBundle\Domain\Repository\MediaCatalogRepository\Exception\MediaCatalogNotFoundException;
 use Skyeng\MarketingCmsBundle\Domain\Repository\MediaCatalogRepository\MediaCatalogRepositoryInterface;
 use Skyeng\MarketingCmsBundle\Domain\Repository\MediaFileRepository\MediaFileRepositoryInterface;
 use Skyeng\MarketingCmsBundle\Infrastructure\Symfony\Form\Fields\VichFileField;
@@ -98,7 +99,9 @@ class MediaFileCrudController extends AbstractCrudController
         $actions->add(Crud::PAGE_INDEX, $getFileLink);
         $actions->add(Crud::PAGE_INDEX, $getFileHtml);
 
-        if ($this->mediaCatalogRepository->getFirst() === null) {
+        try {
+            $this->mediaCatalogRepository->getFirst();
+        } catch (MediaCatalogNotFoundException $e) {
             $actions->remove(Crud::PAGE_INDEX, Action::NEW);
         }
 
