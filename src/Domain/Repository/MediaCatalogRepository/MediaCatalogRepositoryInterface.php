@@ -6,6 +6,7 @@ namespace Skyeng\MarketingCmsBundle\Domain\Repository\MediaCatalogRepository;
 
 use Skyeng\MarketingCmsBundle\Domain\Entity\MediaCatalog;
 use Skyeng\MarketingCmsBundle\Domain\Entity\ValueObject\Id;
+use Skyeng\MarketingCmsBundle\Domain\Repository\MediaCatalogRepository\Exception\MediaCatalogNotFoundException;
 use Skyeng\MarketingCmsBundle\Domain\Repository\MediaCatalogRepository\Exception\MediaCatalogRepositoryException;
 
 interface MediaCatalogRepositoryInterface
@@ -20,6 +21,7 @@ interface MediaCatalogRepositoryInterface
 
     /**
      * @throws MediaCatalogRepositoryException
+     * @throws MediaCatalogNotFoundException
      */
-    public function getFirst(): ?MediaCatalog;
+    public function getFirst(): MediaCatalog;
 }

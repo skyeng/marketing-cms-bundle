@@ -13,7 +13,7 @@ services:
       - '../../Domain/{Exception,Traits,Entity,Event}/**/*.php'
 
   marketing_cms_bundle.listener.media_file_updated_listener:
-    class: Skyeng\MarketingCmsBundle\EventListener\MediaFileUpdatedListener
+    class: Skyeng\MarketingCmsBundle\Application\EventListener\MediaFileUpdatedListener
     tags:
       - { name: doctrine.event_listener, event: preUpdate, method: preUpdate }
       - { name: doctrine.event_listener, event: prePersist, method: prePersist }

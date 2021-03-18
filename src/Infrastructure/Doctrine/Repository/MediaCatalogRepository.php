@@ -10,6 +10,7 @@ use Exception;
 use Ramsey\Uuid\Uuid;
 use Skyeng\MarketingCmsBundle\Domain\Entity\MediaCatalog;
 use Skyeng\MarketingCmsBundle\Domain\Entity\ValueObject\Id;
+use Skyeng\MarketingCmsBundle\Domain\Repository\MediaCatalogRepository\Exception\MediaCatalogNotFoundException;
 use Skyeng\MarketingCmsBundle\Domain\Repository\MediaCatalogRepository\Exception\MediaCatalogRepositoryException;
 use Skyeng\MarketingCmsBundle\Domain\Repository\MediaCatalogRepository\MediaCatalogRepositoryInterface;
 
@@ -35,10 +36,18 @@ class MediaCatalogRepository extends ServiceEntityRepository implements MediaCat
         }
     }
 
-    public function getFirst(): ?MediaCatalog
+    public function getFirst(): MediaCatalog
     {
         try {
-            return $this->findOneBy([], ['id' => 'desc']);
+            $catalog = $this->findOneBy([], ['id' => 'desc']);
+
+            if ($catalog === null) {
+                throw new MediaCatalogNotFoundException();
+            }
+
+            return $catalog;
+        } catch (MediaCatalogNotFoundException $e) {
+            throw $e;
         } catch (Exception $e) {
             throw new MediaCatalogRepositoryException($e->getMessage(), $e->getCode(), $e);
         }

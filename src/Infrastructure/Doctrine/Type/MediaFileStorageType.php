@@ -23,6 +23,6 @@ class MediaFileStorageType extends Type
 
     public function getName(): string
     {
-        return 'media_file_storage';
+        return 'cms_media_file_storage';
     }
 }

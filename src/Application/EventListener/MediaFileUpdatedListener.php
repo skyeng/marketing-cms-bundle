@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Skyeng\MarketingCmsBundle\EventListener;
+namespace Skyeng\MarketingCmsBundle\Application\EventListener;
 
 use Doctrine\Persistence\Event\LifecycleEventArgs;
 use Skyeng\MarketingCmsBundle\Application\Cms\MediaFile\Service\MediaFileTypeResolver;
