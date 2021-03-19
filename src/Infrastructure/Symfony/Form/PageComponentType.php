@@ -13,6 +13,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -44,15 +46,38 @@ class PageComponentType extends AbstractType
                 'required' => true,
                 'label' => 'Позиция',
                 'attr' => [
-                    'positionable' => 'positionable'
+                    'positionable' => 'positionable',
+                    'value' => 1,
                 ],
             ])
             ->add('isPublished', CheckboxType::class, [
-                'label' => 'Компонент активен'
+                'label' => 'Компонент активен',
+                'attr' => [
+                    'checked' => 'checked',
+                ],
             ])
             ->add('data', HTMLComponentType::class, [
                 'label' => 'Данные'
             ]);
+
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, static function (FormEvent $event) {
+            $component = $event->getData();
+            $form = $event->getForm();
+
+            if ($component instanceof PageComponent) {
+                $form
+                    ->add('isPublished', CheckboxType::class, [
+                        'label' => 'Компонент активен'
+                    ])
+                    ->add('order', IntegerType::class, [
+                        'required' => true,
+                        'label' => 'Позиция',
+                        'attr' => [
+                            'positionable' => 'positionable',
+                        ],
+                    ]);
+            }
+        });
     }
 
     public function configureOptions(OptionsResolver $resolver): void
