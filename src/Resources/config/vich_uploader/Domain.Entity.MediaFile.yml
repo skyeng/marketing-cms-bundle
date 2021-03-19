@@ -1,5 +1,5 @@
 Skyeng\MarketingCmsBundle\Domain\Entity\MediaFile:
   file:
-    mapping: media_files
+    mapping: cms_media_files
     filename_property: name
     original_name: originalName
