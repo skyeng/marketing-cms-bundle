@@ -1,9 +1,9 @@
-vich_uploader:
-    db_driver: orm
-    storage: flysystem
+parameters:
+  env(UPLOADS_BASE_URL): '/uploads'
 
+vich_uploader:
     mappings:
-        media_files:
-            uri_prefix: '%app.uploads_base_url%'
+        cms_media_files:
+            uri_prefix: 'env(UPLOADS_BASE_URL)'
             upload_destination: 'uploads.nfs'
             namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
