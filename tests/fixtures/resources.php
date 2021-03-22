@@ -21,4 +21,9 @@ return [
         'uri' => '/test-file-redirect.json',
         'type' => 'redirect',
     ],
+    [
+        'id' => '52d13ef8-9b6c-46e1-ba66-70240ab372ed',
+        'uri' => '/test-page',
+        'type' => 'page',
+    ],
 ];
