@@ -52,7 +52,7 @@ class GetPageV1Controller extends AbstractController
      *     @SWG\Schema(
      *         type="object",
      *         allOf={
-     *             @SWG\Schema(ref="#/definitions/JsonResponseOk"),
+     *             @SWG\Schema(ref="#/definitions/MarketingCmsJsonResponseOk"),
      *             @SWG\Schema(
      *                 @SWG\Property(
      *                     property="data",
@@ -62,8 +62,8 @@ class GetPageV1Controller extends AbstractController
      *         }
      *     )
      * ),
-     * @SWG\Response(response=400, description="Bad Request", @SWG\Schema(ref="#/definitions/JsonResponseError")),
-     * @SWG\Response(response=500, description="Internal Server Error", @SWG\Schema(ref="#/definitions/JsonResponseException")),
+     * @SWG\Response(response=400, description="Bad Request", @SWG\Schema(ref="#/definitions/MarketingCmsJsonResponseError")),
+     * @SWG\Response(response=500, description="Internal Server Error", @SWG\Schema(ref="#/definitions/MarketingCmsJsonResponseException")),
      *
      * @Route("/api/v1/cms/get-page", methods={"GET"})
      *
