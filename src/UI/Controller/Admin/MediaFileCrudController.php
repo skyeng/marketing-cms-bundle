@@ -75,7 +75,11 @@ class MediaFileCrudController extends AbstractCrudController
 
     public function configureAssets(Assets $assets): Assets
     {
-        return $assets->addJsFile('bundles/marketingcms/ea-copy-actions.js');
+        $hideMediaCatalogSelectorClearButton = '#MediaFile_catalog + .select2 .select2-selection__clear {display:none;}';
+
+        return $assets
+            ->addHtmlContentToHead("<style>$hideMediaCatalogSelectorClearButton</style>")
+            ->addJsFile('bundles/marketingcms/ea-copy-actions.js');
     }
 
     public function configureActions(Actions $actions): Actions
@@ -118,8 +122,10 @@ class MediaFileCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         $title = TextField::new('title', 'Заголовок файла');
-        $file = VichFileField::new('file', 'Файл');
-        $catalog = AssociationField::new('catalog', 'Каталог');
+        $file = VichFileField::new('file', 'Файл')->setFormTypeOptions([
+            'allow_delete' => false,
+        ]);
+        $catalog = AssociationField::new('catalog', 'Каталог')->setRequired(true);
         $originalName = TextField::new('originalName', 'Название файла');
 
         if (in_array($pageName, [Crud::PAGE_INDEX, Crud::PAGE_DETAIL], true)) {
