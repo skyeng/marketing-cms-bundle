@@ -10,7 +10,7 @@ use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 class MediaFilePathResolver
 {
     private const IMAGE_HTML_MASK = '<img src="%s" title="%s"/>';
-    private const VIDEO_HTML_MASK = '<video><source src="%s"></video>';
+    private const VIDEO_HTML_MASK = '<video controls><source src="%s"></video>';
     private const PDF_HTML_MASK = '<embed src="%s"/>';
 
     /**

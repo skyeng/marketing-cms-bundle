@@ -46,9 +46,15 @@ class MediaFileUpdatedListener
             return;
         }
 
-        $object->setType($this->mediaFileTypeResolver->getMediaFileTypeByFile($object->getFile()));
+        if (!$object->getFile()) {
+            return;
+        }
 
+        $object->setType($this->mediaFileTypeResolver->getMediaFileTypeByFile($object->getFile()));
         $mapping = $this->fileMappingFactory->fromField($object, 'file');
-        $object->setStorage(new MediaFileStorage($mapping->getUploadDestination()));
+
+        if ($mapping) {
+            $object->setStorage(new MediaFileStorage($mapping->getUploadDestination()));
+        }
     }
 }
