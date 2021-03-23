@@ -33,6 +33,7 @@ class MarketingCmsExtension extends Extension implements PrependExtensionInterfa
         $configsFiles = [
             'doctrine.yaml',
             'nelmio_api_doc.yaml',
+            'vich_uploader.yaml',
         ];
 
         foreach ($configsFiles as $configFile) {

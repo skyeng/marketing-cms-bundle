@@ -4,6 +4,11 @@ declare(strict_types=1);
 
 namespace Skyeng\MarketingCmsBundle\UI\Controller\Admin;
 
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Option\EA;
+use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
+use Skyeng\MarketingCmsBundle\Domain\Entity\MediaFile;
 use Skyeng\MarketingCmsBundle\Domain\Entity\Page;
 use Skyeng\MarketingCmsBundle\Domain\Entity\PageOpenGraphData;
 use Skyeng\MarketingCmsBundle\Domain\Entity\PageSeoData;
@@ -38,10 +43,19 @@ class PageCrudController extends AbstractCrudController
      */
     private $pageRepository;
 
-    public function __construct(ResourceRepositoryInterface $resourceRepository, PageRepositoryInterface $pageRepository)
-    {
+    /**
+     * @var AdminUrlGenerator
+     */
+    private $adminUrlGenerator;
+
+    public function __construct(
+        ResourceRepositoryInterface $resourceRepository,
+        PageRepositoryInterface $pageRepository,
+        AdminUrlGenerator $adminUrlGenerator
+    ) {
         $this->resourceRepository = $resourceRepository;
         $this->pageRepository = $pageRepository;
+        $this->adminUrlGenerator = $adminUrlGenerator;
     }
 
     public static function getEntityFqcn(): string
@@ -57,6 +71,25 @@ class PageCrudController extends AbstractCrudController
             ->setPageTitle(Crud::PAGE_NEW, 'Создать страницу')
             ->setPageTitle(Crud::PAGE_EDIT, 'Страница')
             ->setPaginatorUseOutputWalkers(true);
+    }
+
+    public function configureActions(Actions $actions): Actions
+    {
+        $mediaFilesAction = Action::new('mediaFiles', 'Медиа библиотека', 'fa fa-image')
+            ->linkToUrl(
+                $this->adminUrlGenerator
+                    ->setController(MediaFileCrudController::class)
+                    ->setAction('index')
+                    ->generateUrl()
+            )
+            ->setHtmlAttributes(['target' => '_blank'])
+            ->addCssClass('btn')
+            ->addCssClass('btn-secondary');
+
+        $actions->add(Crud::PAGE_EDIT, $mediaFilesAction);
+        $actions->add(Crud::PAGE_NEW, $mediaFilesAction);
+
+        return $actions;
     }
 
     public function configureFields(string $pageName): iterable

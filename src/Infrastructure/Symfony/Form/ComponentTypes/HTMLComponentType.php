@@ -13,7 +13,12 @@ class HTMLComponentType extends AbstractType implements DataTransformerInterface
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('html', TextareaType::class);
+        $builder->add('html', TextareaType::class, [
+            'attr' => [
+                'styles' => 'height: auto;',
+                'rows' => 10,
+            ]
+        ]);
 
         $builder->resetViewTransformers();
         $builder->addViewTransformer($this);

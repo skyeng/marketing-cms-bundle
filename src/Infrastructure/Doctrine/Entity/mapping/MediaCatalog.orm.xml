@@ -1,0 +1,12 @@
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="Skyeng\MarketingCmsBundle\Domain\Entity\MediaCatalog" table="cms_media_catalog"
+            repository-class="Skyeng\MarketingCmsBundle\Infrastructure\Doctrine\Repository\MediaCatalogRepository">
+        <id name="id" type="cms_id"/>
+        <field name="name" unique="true"/>
+    </entity>
+
+</doctrine-mapping>

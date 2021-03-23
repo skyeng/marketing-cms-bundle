@@ -8,7 +8,8 @@
     "psr/http-message": "*",
     "ramsey/uuid": "^4.1",
     "ramsey/uuid-doctrine": "^1.6",
-    "symfony/validator": "4.4.*"
+    "symfony/validator": "4.4.*",
+    "vich/uploader-bundle": "^1.16"
   },
   "require-dev": {
     "codeception/codeception": "^2.5",
