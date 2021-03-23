@@ -132,6 +132,10 @@ class MediaFileCrudController extends AbstractCrudController
             return [$originalName, $title, $catalog];
         }
 
+        if ($pageName === Crud::PAGE_NEW) {
+            $file->setRequired(true);
+        }
+
         return [$catalog, $title, $file];
     }
 
