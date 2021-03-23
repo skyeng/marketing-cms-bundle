@@ -52,6 +52,5 @@ Skyeng\MarketingCmsBundle\Domain\Entity\MediaFile:
   properties:
     file:
       - File: { maxSize: 20M, mimeTypes: [ image/jpeg, image/png, image/gif, application/pdf, video/mp4 ] }
-      - NotBlank: ~
     catalog:
       - NotBlank: ~
