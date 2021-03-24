@@ -1,4 +1,0 @@
-vich_uploader:
-    mappings:
-        cms_media_files:
-            upload_destination: 'uploads.s3'
