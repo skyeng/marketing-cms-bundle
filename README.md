@@ -64,3 +64,27 @@ https://confluence.skyeng.tech/x/SLMhBQ
         }
     }
     ```
+  
+<h3>Настройка Медиа библиотеки:</h3>
+
+* Определить переменную окружения UPLOADS_BASE_URL, она будет использована как uri_prefix для медиа файлов
+
+* По-умолчанию в маппинге vich_uploader для медиа файлов указан upload_destination: 'upload.nfs', его можно переопределить:
+    ```yaml
+    # config/packages/vich_uploader.yaml
+  
+    vich_uploader:
+      mappings:
+        cms_media_files:
+          upload_destination: 'uploads.nfs' # Указать свой
+    ```
+
+* Также можно переопределить конфиг vich_uploader для prod окружения:
+    ```yaml
+    # config/packages/prod/vich_uploader.yaml
+  
+    vich_uploader:
+      mappings:
+        cms_media_files:
+          upload_destination: 'uploads.s3' # Указать свой
+    ```
