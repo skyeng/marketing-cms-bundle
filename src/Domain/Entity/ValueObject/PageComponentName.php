@@ -10,9 +10,11 @@ use Skyeng\MarketingCmsBundle\Domain\Traits\ValueObjectTrait;
 class PageComponentName
 {
     public const HTML_COMPONENT = 'html-component';
+    public const SIMPLE_FORM_COMPONENT = 'simple-form-component';
 
     public const AVAILABLE_COMPONENTS = [
         self::HTML_COMPONENT => self::HTML_COMPONENT,
+        self::SIMPLE_FORM_COMPONENT => self::SIMPLE_FORM_COMPONENT,
     ];
 
     use ValueObjectTrait;
@@ -27,5 +29,10 @@ class PageComponentName
     public function isHtml(): bool
     {
         return $this->value === self::HTML_COMPONENT;
+    }
+
+    public function isSimpleForm(): bool
+    {
+        return $this->value === self::SIMPLE_FORM_COMPONENT;
     }
 }
