@@ -15,5 +15,4 @@ services:
   marketing_cms_bundle.listener.media_file_updated_listener:
     class: Skyeng\MarketingCmsBundle\Application\EventListener\MediaFileUpdatedListener
     tags:
-      - { name: doctrine.event_listener, event: preUpdate, method: preUpdate }
-      - { name: doctrine.event_listener, event: prePersist, method: prePersist }
+      - { name: kernel.event_listener, event: vich_uploader.pre_upload, method: onVichUploaderPreUpdate }
