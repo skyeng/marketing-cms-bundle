@@ -21,6 +21,16 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class PageComponentType extends AbstractType
 {
+    private const COMPONENT_CLASS = [
+        PageComponentName::HTML_COMPONENT => HTMLComponentType::class,
+        PageComponentName::SIMPLE_FORM_COMPONENT => SimpleFormComponentType::class,
+    ];
+
+    private const COMPONENTS_LIST = [
+        'HTML' => PageComponentName::HTML_COMPONENT,
+        'Simple form' => PageComponentName::SIMPLE_FORM_COMPONENT,
+    ];
+
     /**
      * @var PageComponentRepositoryInterface
      */
@@ -35,7 +45,7 @@ class PageComponentType extends AbstractType
     {
         $builder
             ->add('name', PageComponentNameType::class, [
-                'choices' => ['HTML' => PageComponentName::HTML_COMPONENT, 'Simple form' => PageComponentName::SIMPLE_FORM_COMPONENT],
+                'choices' => self::COMPONENTS_LIST,
                 'required' => true,
                 'label' => 'Компонент',
                 'attr' => [
@@ -62,15 +72,9 @@ class PageComponentType extends AbstractType
             $form = $event->getForm();
 
             if ($data instanceof PageComponent) {
-                if ($data->getName()->isHtml()) {
-                    $form->add('data', HTMLComponentType::class, [
-                        'label' => 'Данные'
-                    ]);
-                } else {
-                    $form->add('data', SimpleFormComponentType::class, [
-                        'label' => 'Данные'
-                    ]);
-                }
+                $form->add('data', self::COMPONENT_CLASS[$data->getName()->getValue()], [
+                    'label' => 'Данные'
+                ]);
             }
         });
 
@@ -78,21 +82,18 @@ class PageComponentType extends AbstractType
             $data = $event->getData();
             $form = $event->getForm();
 
-            if (!array_key_exists('name', $data) || !in_array($data['name'], PageComponentName::AVAILABLE_COMPONENTS)) {
+            if (!array_key_exists('name', $data)) {
+                return;
+            }
+
+            if (!in_array($data['name'], self::COMPONENTS_LIST, true)) {
                 return;
             }
 
             $pageComponentName = new PageComponentName($data['name']);
-
-            if ($pageComponentName->isHtml()) {
-                $form->add('data', HTMLComponentType::class, [
-                    'label' => 'Данные'
-                ]);
-            } else {
-                $form->add('data', SimpleFormComponentType::class, [
-                    'label' => 'Данные'
-                ]);
-            }
+            $form->add('data', self::COMPONENT_CLASS[$pageComponentName->getValue()], [
+                'label' => 'Данные'
+            ]);
         });
     }
 
