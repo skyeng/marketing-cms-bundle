@@ -1,11 +1,11 @@
-# MarketingCmsBundle
+# Marketing CMS Bundle
 
 ## Краткое описание
-Добавляет в проект с easyadmin функционал CMS (статические файлы, редиректы и конструктор страниц).
+Пакет, предоставляющий возможности CMS (управление контентом сайта). Можно подключать к другим проектам, использующим EasyAdmin.
 
 ## Ответственные:
-* Code owner: Сергей Романов
-* Product Owner: Иван Бодяк
+* Code owner: [Сергей Романов](https://skyeng.slack.com/team/U0103P1H9JM)
+* Product Owner: [Иван Бодяк](https://skyeng.slack.com/team/UL2T66736)
 * Команда: Marketing Core (C0)
 
 ## Slack-каналы 
