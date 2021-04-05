@@ -27,10 +27,19 @@ class GetPageComponentFormController extends AbstractController
      */
     private $pageComponentFormService;
 
-    public function __construct(ValidatorInterface $validator, PageComponentFormService $pageComponentFormService)
-    {
+    /**
+     * @var ResponseFactory
+     */
+    private $responseFactory;
+
+    public function __construct(
+        ValidatorInterface $validator,
+        PageComponentFormService $pageComponentFormService,
+        ResponseFactory $responseFactory
+    ) {
         $this->validator = $validator;
         $this->pageComponentFormService = $pageComponentFormService;
+        $this->responseFactory = $responseFactory;
     }
 
     /**
@@ -53,11 +62,14 @@ class GetPageComponentFormController extends AbstractController
 
         $result = $this->pageComponentFormService->getPageComponentForm($dto);
 
-        return $this->render('@MarketingCms/page_component/page_component_data_form.html.twig', [
-            'form' => $result->result->createView(),
-            'themes' => [
-                '@EasyAdmin/crud/form_theme.html.twig',
-            ],
-        ]);
+        return $this->responseFactory->createViewResponse(
+            '@MarketingCms/page_component/page_component_data_form.html.twig',
+            [
+                'form' => $result->result->createView(),
+                'themes' => [
+                    '@EasyAdmin/crud/form_theme.html.twig',
+                ],
+            ]
+        );
     }
 }
