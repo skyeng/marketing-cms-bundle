@@ -6,19 +6,17 @@ namespace Skyeng\MarketingCmsBundle\Infrastructure\Symfony\Form\ComponentTypes;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\DataTransformerInterface;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-class HTMLComponentType extends AbstractType implements DataTransformerInterface
+class SimpleFormComponentType extends AbstractType implements DataTransformerInterface
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder->add('html', TextareaType::class, [
-            'attr' => [
-                'styles' => 'height: auto;',
-                'rows' => 10,
-            ]
-        ]);
+        $builder
+            ->add('field', TextType::class)
+            ->add('stk', IntegerType::class);
 
         $builder->resetViewTransformers();
         $builder->addViewTransformer($this);
@@ -26,9 +24,13 @@ class HTMLComponentType extends AbstractType implements DataTransformerInterface
 
     public function transform($value): array
     {
-        $value = $value['html'] ?? null;
+        $field = $value['field'] ?? null;
+        $stk = $value['stk'] ?? null;
 
-        return ['html' => (string)$value];
+        return [
+            'field' => (string)$field,
+            'stk' => (int)$stk,
+        ];
     }
 
     public function reverseTransform($value): array
