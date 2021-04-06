@@ -11,7 +11,7 @@ class ComponentTypeCollection implements ComponentTypeCollectionInterface
     /**
      * @var ComponentTypeInterface[]
      */
-    private $componentTypes;
+    private $componentTypes = [];
 
     /**
      * @param ComponentTypeInterface[] $componentTypes
