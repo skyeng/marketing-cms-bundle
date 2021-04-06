@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Skyeng\MarketingCmsBundle\Infrastructure\Symfony\Form;
 
 use Skyeng\MarketingCmsBundle\Domain\Entity\ValueObject\PageComponentName;
-use Skyeng\MarketingCmsBundle\Infrastructure\Symfony\Service\ComponentTypeResolver\ComponentTypeResolverInterface;
-use Skyeng\MarketingCmsBundle\Infrastructure\Symfony\Service\ComponentTypeResolver\Exception\ComponentTypeNotFoundException;
+use Skyeng\MarketingCmsBundle\Application\Cms\PageComponentType\Service\ComponentTypeResolver\ComponentTypeResolverInterface;
+use Skyeng\MarketingCmsBundle\Application\Cms\PageComponentType\Service\ComponentTypeResolver\Exception\ComponentTypeNotFoundException;
 use Symfony\Component\Form\ChoiceList\Factory\ChoiceListFactoryInterface;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
