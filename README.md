@@ -88,3 +88,65 @@ https://confluence.skyeng.tech/x/SLMhBQ
         cms_media_files:
           upload_destination: 'uploads.s3' # Указать свой
     ```
+
+### Добавление своих компонентов для страниц
+
+По-умолчанию доступен только компонент HTML, для добавления собственных компонентов вам нужно:
+
+* Создать собственную форму компонента и реализовать интерфейс Skyeng\MarketingCmsBundle\Infrastructure\Symfony\Form\ComponentTypes\ComponentTypeInterface
+
+* В интерфейсе есть два метода: метод getName() возвращает название компонента для использования на клиентской стороне, а getTitle() определяет как будет называться компонент при выборе в админке.
+
+Пример компонента:
+```php
+namespace App;
+
+use Skyeng\MarketingCmsBundle\Infrastructure\Symfony\Form\ComponentTypes\ComponentTypeInterface;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\DataTransformerInterface;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormBuilderInterface;
+
+class CustomComponentType extends AbstractType implements DataTransformerInterface, ComponentTypeInterface
+{
+    private const NAME = 'custom-component';
+    private const TITLE = 'Custom component';
+
+    public function buildForm(FormBuilderInterface $builder, array $options): void
+    {
+        $builder
+            ->add('title', TextType::class)
+            ->add('checkbox', CheckboxType::class);
+
+        $builder->resetViewTransformers();
+        $builder->addViewTransformer($this);
+    }
+
+    public function transform($value): array
+    {
+        $title = $value['title'] ?? null;
+        $checkbox = $value['checkbox'] ?? null;
+
+        return [
+            'title' => (string)$title,
+            'checkbox' => (bool)$checkbox,
+        ];
+    }
+
+    public function reverseTransform($value): array
+    {
+        return $value;
+    }
+
+    public function getTitle(): string
+    {
+        return self::TITLE;
+    }
+
+    public function getName(): string
+    {
+        return self::NAME;
+    }
+}
+```
