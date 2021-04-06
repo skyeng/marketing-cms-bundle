@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Skyeng\MarketingCmsBundle\Infrastructure\Symfony\Service\ComponentType;
+namespace Skyeng\MarketingCmsBundle\Application\Cms\PageComponentType\Service\ComponentTypeCollection;
 
-use Skyeng\MarketingCmsBundle\Infrastructure\Symfony\Form\ComponentTypes\ComponentTypeInterface;
+use Skyeng\MarketingCmsBundle\Application\Cms\PageComponentType\ComponentType\ComponentTypeInterface;
 
 class ComponentTypeCollection implements ComponentTypeCollectionInterface
 {
@@ -26,5 +26,10 @@ class ComponentTypeCollection implements ComponentTypeCollectionInterface
     public function getComponentTypes(): array
     {
         return $this->componentTypes;
+    }
+
+    public function getByName(string $name): ?ComponentTypeInterface
+    {
+        return $this->componentTypes[$name] ?? null;
     }
 }

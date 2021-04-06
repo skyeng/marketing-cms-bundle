@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Skyeng\MarketingCmsBundle\Infrastructure\Symfony\Service\ComponentTypeResolver;
+namespace Skyeng\MarketingCmsBundle\Application\Cms\PageComponentType\Service\ComponentTypeResolver;
 
-use Skyeng\MarketingCmsBundle\Infrastructure\Symfony\Form\ComponentTypes\ComponentTypeInterface;
+use Skyeng\MarketingCmsBundle\Application\Cms\PageComponentType\ComponentType\ComponentTypeInterface;
 use Skyeng\MarketingCmsBundle\Infrastructure\Symfony\Service\ComponentType\ComponentTypeCollectionInterface;
 use Skyeng\MarketingCmsBundle\Infrastructure\Symfony\Service\ComponentTypeResolver\Exception\ComponentTypeNotFoundException;
 
@@ -22,10 +22,10 @@ class ComponentTypeResolver implements ComponentTypeResolverInterface
 
     public function resolveByName(string $name): ComponentTypeInterface
     {
-        foreach ($this->collection->getComponentTypes() as $componentType) {
-            if ($componentType->getName() === $name) {
-                return $componentType;
-            }
+        $componentType = $this->collection->getByName($name);
+
+        if ($componentType) {
+            return $componentType;
         }
 
         throw new ComponentTypeNotFoundException();

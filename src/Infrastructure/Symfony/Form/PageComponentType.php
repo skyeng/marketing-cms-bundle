@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace Skyeng\MarketingCmsBundle\Infrastructure\Symfony\Form;
 
+use Psr\Log\LoggerInterface;
 use Skyeng\MarketingCmsBundle\Domain\Entity\PageComponent;
 use Skyeng\MarketingCmsBundle\Domain\Entity\ValueObject\PageComponentName;
-use Skyeng\MarketingCmsBundle\Domain\Repository\PageComponentRepository\Exception\PageComponentNotFoundException;
 use Skyeng\MarketingCmsBundle\Domain\Repository\PageComponentRepository\PageComponentRepositoryInterface;
-use Skyeng\MarketingCmsBundle\Infrastructure\Symfony\Form\ComponentTypes\HTMLComponentType;
-use Skyeng\MarketingCmsBundle\Infrastructure\Symfony\Service\ComponentType\ComponentTypeCollectionInterface;
-use Skyeng\MarketingCmsBundle\Infrastructure\Symfony\Service\ComponentTypeResolver\ComponentTypeResolverInterface;
-use Skyeng\MarketingCmsBundle\Infrastructure\Symfony\Service\ComponentTypeResolver\Exception\ComponentTypeNotFoundException;
+use Skyeng\MarketingCmsBundle\Application\Cms\PageComponentType\Service\ComponentTypeCollection\ComponentTypeCollectionInterface;
+use Skyeng\MarketingCmsBundle\Application\Cms\PageComponentType\Service\ComponentTypeResolver\ComponentTypeResolverInterface;
+use Skyeng\MarketingCmsBundle\Application\Cms\PageComponentType\Service\ComponentTypeResolver\Exception\ComponentTypeNotFoundException;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -38,14 +37,21 @@ class PageComponentType extends AbstractType
      */
     private $componentTypeResolver;
 
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
     public function __construct(
         PageComponentRepositoryInterface $componentRepository,
         ComponentTypeCollectionInterface $componentTypes,
-        ComponentTypeResolverInterface $componentTypeResolver
+        ComponentTypeResolverInterface $componentTypeResolver,
+        LoggerInterface $logger
     ) {
         $this->componentRepository = $componentRepository;
         $this->componentTypes = $componentTypes;
         $this->componentTypeResolver = $componentTypeResolver;
+        $this->logger = $logger;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -127,6 +133,10 @@ class PageComponentType extends AbstractType
                 'label' => 'Данные'
             ]);
         } catch (ComponentTypeNotFoundException $e) {
+             $this->logger->warning(
+                 'Component type not found by name',
+                 ['name' => $componentName, 'errorMessage' => $e->getMessage()]
+             );
         }
     }
 }

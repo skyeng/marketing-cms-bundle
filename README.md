@@ -93,7 +93,7 @@ https://confluence.skyeng.tech/x/SLMhBQ
 
 По-умолчанию доступен только компонент HTML, для добавления собственных компонентов вам нужно:
 
-* Создать собственную форму компонента и реализовать интерфейс Skyeng\MarketingCmsBundle\Infrastructure\Symfony\Form\ComponentTypes\ComponentTypeInterface
+* Создать собственную форму компонента и реализовать интерфейс Skyeng\MarketingCmsBundle\Application\Cms\PageComponentType\ComponentType\ComponentTypeInterface
 
 * В интерфейсе есть два метода: метод getName() возвращает название компонента для использования на клиентской стороне, а getTitle() определяет как будет называться компонент при выборе в админке.
 
@@ -101,7 +101,7 @@ https://confluence.skyeng.tech/x/SLMhBQ
 ```php
 namespace App;
 
-use Skyeng\MarketingCmsBundle\Infrastructure\Symfony\Form\ComponentTypes\ComponentTypeInterface;
+use Skyeng\MarketingCmsBundle\Application\Cms\PageComponentType\ComponentType\ComponentTypeInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;

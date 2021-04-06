@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Skyeng\MarketingCmsBundle\Infrastructure\Symfony\Service\ComponentTypeResolver\Exception;
+namespace Skyeng\MarketingCmsBundle\Application\Cms\PageComponentType\Service\ComponentTypeResolver\Exception;
 
 use Skyeng\MarketingCmsBundle\Domain\Exception\NotFoundException;
 

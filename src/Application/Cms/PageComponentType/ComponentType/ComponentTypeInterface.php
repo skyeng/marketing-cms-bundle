@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Skyeng\MarketingCmsBundle\Infrastructure\Symfony\Form\ComponentTypes;
+namespace Skyeng\MarketingCmsBundle\Application\Cms\PageComponentType\ComponentType;
 
 use Symfony\Component\Form\FormTypeInterface;
 
