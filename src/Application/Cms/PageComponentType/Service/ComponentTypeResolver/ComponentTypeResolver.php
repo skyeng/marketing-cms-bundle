@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Skyeng\MarketingCmsBundle\Application\Cms\PageComponentType\Service\ComponentTypeResolver;
 
 use Skyeng\MarketingCmsBundle\Application\Cms\PageComponentType\ComponentType\ComponentTypeInterface;
-use Skyeng\MarketingCmsBundle\Infrastructure\Symfony\Service\ComponentType\ComponentTypeCollectionInterface;
-use Skyeng\MarketingCmsBundle\Infrastructure\Symfony\Service\ComponentTypeResolver\Exception\ComponentTypeNotFoundException;
+use Skyeng\MarketingCmsBundle\Application\Cms\PageComponentType\Service\ComponentTypeCollection\ComponentTypeCollectionInterface;
+use Skyeng\MarketingCmsBundle\Application\Cms\PageComponentType\Service\ComponentTypeResolver\Exception\ComponentTypeNotFoundException;
 
 class ComponentTypeResolver implements ComponentTypeResolverInterface
 {
