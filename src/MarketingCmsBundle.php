@@ -6,7 +6,7 @@ namespace Skyeng\MarketingCmsBundle;
 
 use Skyeng\MarketingCmsBundle\Infrastructure\DependencyInjection\MarketingCmsExtension;
 use Skyeng\MarketingCmsBundle\Infrastructure\Symfony\DependencyInjection\ComponentTypeCollectionCompilerPass;
-use Skyeng\MarketingCmsBundle\Infrastructure\Symfony\Form\ComponentTypes\ComponentTypeInterface;
+use Skyeng\MarketingCmsBundle\Application\Cms\PageComponentType\ComponentType\ComponentTypeInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
