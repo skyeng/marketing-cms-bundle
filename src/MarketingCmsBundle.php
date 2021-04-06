@@ -21,7 +21,7 @@ class MarketingCmsBundle extends Bundle
     {
         parent::build($container);
 
-        $container->registerForAutoconfiguration(ComponentTypeInterface::class)->addTag('component_type');
+        $container->registerForAutoconfiguration(ComponentTypeInterface::class)->addTag('cms_component_type');
         $container->addCompilerPass(new ComponentTypeCollectionCompilerPass());
     }
 }

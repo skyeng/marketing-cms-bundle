@@ -20,7 +20,7 @@ class ComponentTypeCollectionCompilerPass implements CompilerPassInterface
 
         $extensions = [];
 
-        foreach (array_keys($container->findTaggedServiceIds('component_type')) as $serviceId) {
+        foreach (array_keys($container->findTaggedServiceIds('cms_component_type')) as $serviceId) {
             $extensions[] = $container->getDefinition($serviceId);
         }
 
