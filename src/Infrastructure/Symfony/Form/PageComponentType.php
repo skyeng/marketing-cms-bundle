@@ -6,10 +6,12 @@ namespace Skyeng\MarketingCmsBundle\Infrastructure\Symfony\Form;
 
 use Skyeng\MarketingCmsBundle\Domain\Entity\PageComponent;
 use Skyeng\MarketingCmsBundle\Domain\Entity\ValueObject\PageComponentName;
+use Skyeng\MarketingCmsBundle\Domain\Repository\PageComponentRepository\Exception\PageComponentNotFoundException;
 use Skyeng\MarketingCmsBundle\Domain\Repository\PageComponentRepository\PageComponentRepositoryInterface;
 use Skyeng\MarketingCmsBundle\Infrastructure\Symfony\Form\ComponentTypes\HTMLComponentType;
-use Skyeng\MarketingCmsBundle\Infrastructure\Symfony\Form\ComponentTypes\SimpleFormComponentType;
-use Skyeng\MarketingCmsBundle\Infrastructure\Symfony\Form\PageComponentNameType;
+use Skyeng\MarketingCmsBundle\Infrastructure\Symfony\Service\ComponentType\ComponentTypeCollectionInterface;
+use Skyeng\MarketingCmsBundle\Infrastructure\Symfony\Service\ComponentTypeResolver\ComponentTypeResolverInterface;
+use Skyeng\MarketingCmsBundle\Infrastructure\Symfony\Service\ComponentTypeResolver\Exception\ComponentTypeNotFoundException;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -21,36 +23,50 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class PageComponentType extends AbstractType
 {
-    private const COMPONENT_CLASS = [
-        PageComponentName::HTML_COMPONENT => HTMLComponentType::class,
-        PageComponentName::SIMPLE_FORM_COMPONENT => SimpleFormComponentType::class,
-    ];
-
-    private const COMPONENTS_LIST = [
-        'HTML' => PageComponentName::HTML_COMPONENT,
-        'Simple form' => PageComponentName::SIMPLE_FORM_COMPONENT,
-    ];
-
     /**
      * @var PageComponentRepositoryInterface
      */
     private $componentRepository;
 
-    public function __construct(PageComponentRepositoryInterface $componentRepository)
-    {
+    /**
+     * @var ComponentTypeCollectionInterface
+     */
+    private $componentTypes;
+
+    /**
+     * @var ComponentTypeResolverInterface
+     */
+    private $componentTypeResolver;
+
+    public function __construct(
+        PageComponentRepositoryInterface $componentRepository,
+        ComponentTypeCollectionInterface $componentTypes,
+        ComponentTypeResolverInterface $componentTypeResolver
+    ) {
         $this->componentRepository = $componentRepository;
+        $this->componentTypes = $componentTypes;
+        $this->componentTypeResolver = $componentTypeResolver;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $componentChoices = [];
+
+        foreach ($this->componentTypes->getComponentTypes() as $componentType) {
+            $componentChoices[$componentType->getTitle()] = $componentType->getName();
+        }
+
         $builder
             ->add('name', PageComponentNameType::class, [
-                'choices' => self::COMPONENTS_LIST,
+                'choices' => $componentChoices,
                 'required' => true,
                 'label' => 'Компонент',
+                'placeholder' => '',
                 'attr' => [
                     'class' => 'field-select page-component-name-select',
                     'data-widget' => 'select2',
+                    'data-placeholder' => 'Выберите компонент',
+                    'data-select' => 'true',
                 ]
             ])
             ->add('order', IntegerType::class, [
@@ -62,23 +78,18 @@ class PageComponentType extends AbstractType
             ])
             ->add('isPublished', CheckboxType::class, [
                 'label' => 'Компонент активен'
-            ])
-            ->add('data', HTMLComponentType::class, [
-                'label' => 'Данные'
             ]);
 
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, static function (FormEvent $event) {
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
             $data = $event->getData();
             $form = $event->getForm();
 
             if ($data instanceof PageComponent) {
-                $form->add('data', self::COMPONENT_CLASS[$data->getName()->getValue()], [
-                    'label' => 'Данные'
-                ]);
+                $this->addComponentToForm($form, $data->getName()->getValue());
             }
         });
 
-        $builder->addEventListener(FormEvents::PRE_SUBMIT, static function (FormEvent $event) {
+        $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
             $data = $event->getData();
             $form = $event->getForm();
 
@@ -86,14 +97,7 @@ class PageComponentType extends AbstractType
                 return;
             }
 
-            if (!in_array($data['name'], self::COMPONENTS_LIST, true)) {
-                return;
-            }
-
-            $pageComponentName = new PageComponentName($data['name']);
-            $form->add('data', self::COMPONENT_CLASS[$pageComponentName->getValue()], [
-                'label' => 'Данные'
-            ]);
+            $this->addComponentToForm($form, $data['name']);
         });
     }
 
@@ -106,11 +110,23 @@ class PageComponentType extends AbstractType
                 return new PageComponent(
                     $this->componentRepository->getNextIdentity(),
                     null,
-                    new PageComponentName(PageComponentName::HTML_COMPONENT),
+                    new PageComponentName(''),
                     $form->getData()['data'] ?? [],
                     $form->getData()['order'] ?? 1,
                 );
             },
         ]);
+    }
+
+    private function addComponentToForm(FormInterface $form, string $componentName): void
+    {
+        try {
+            $componentType = $this->componentTypeResolver->resolveByName($componentName);
+
+            $form->add('data', get_class($componentType), [
+                'label' => 'Данные'
+            ]);
+        } catch (ComponentTypeNotFoundException $e) {
+        }
     }
 }

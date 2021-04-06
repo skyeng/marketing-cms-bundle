@@ -9,8 +9,11 @@ use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-class HTMLComponentType extends AbstractType implements DataTransformerInterface
+class HTMLComponentType extends AbstractType implements DataTransformerInterface, ComponentTypeInterface
 {
+    private const NAME = 'html-component';
+    private const TITLE = 'HTML';
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('html', TextareaType::class, [
@@ -34,5 +37,15 @@ class HTMLComponentType extends AbstractType implements DataTransformerInterface
     public function reverseTransform($value): array
     {
         return $value;
+    }
+
+    public function getTitle(): string
+    {
+        return self::TITLE;
+    }
+
+    public function getName(): string
+    {
+        return self::NAME;
     }
 }
