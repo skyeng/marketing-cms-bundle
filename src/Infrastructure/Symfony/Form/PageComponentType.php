@@ -79,11 +79,15 @@ class PageComponentType extends AbstractType
                 'required' => true,
                 'label' => 'Позиция',
                 'attr' => [
-                    'positionable' => 'positionable'
+                    'positionable' => 'positionable',
+                    'value' => 1,
                 ],
             ])
             ->add('isPublished', CheckboxType::class, [
-                'label' => 'Компонент активен'
+                'label' => 'Компонент активен',
+                'attr' => [
+                    'checked' => 'checked',
+                ],
             ]);
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
@@ -92,6 +96,17 @@ class PageComponentType extends AbstractType
 
             if ($data instanceof PageComponent) {
                 $this->addComponentToForm($form, $data->getName()->getValue());
+                $form
+                    ->add('isPublished', CheckboxType::class, [
+                        'label' => 'Компонент активен'
+                    ])
+                    ->add('order', IntegerType::class, [
+                        'required' => true,
+                        'label' => 'Позиция',
+                        'attr' => [
+                            'positionable' => 'positionable',
+                        ],
+                    ]);
             }
         });
 
