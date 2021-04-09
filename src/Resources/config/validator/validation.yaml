@@ -24,6 +24,11 @@ Skyeng\MarketingCmsBundle\Domain\Entity\PageComponent:
         errorPath: order
         message: 'Это значение уже используется для этой страницы'
   properties:
+    name:
+      - NotBlank: ~
+      - Length:
+          min: 1
+          minMessage: 'Выберите компонент'
     order:
       - NotBlank: ~
       - Positive: ~

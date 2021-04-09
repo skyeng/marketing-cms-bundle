@@ -127,7 +127,8 @@ class PageCrudController extends AbstractCrudController
             ->addCssClass('expanded-collection')
             ->addCssClass('positionable-collection')
             ->addCssFiles('bundles/marketingcms/expanded-collection-style.css')
-            ->addJsFiles('bundles/marketingcms/positionable-collection.js');
+            ->addJsFiles('bundles/marketingcms/positionable-collection.js')
+            ->addJsFiles('bundles/marketingcms/dynamic-page-components.js');
 
         if (in_array($pageName, [Crud::PAGE_INDEX, Crud::PAGE_DETAIL], true)) {
             return [$resource, $title, $isPublished, $publishedAt];

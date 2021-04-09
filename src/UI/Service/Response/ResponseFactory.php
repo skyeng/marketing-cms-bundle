@@ -11,9 +11,20 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\EventListener\AbstractSessionListener;
 use Throwable;
+use Twig\Environment;
 
 class ResponseFactory
 {
+    /**
+     * @var Environment
+     */
+    private $twigEnvironment;
+
+    public function __construct(Environment $twigEnvironment)
+    {
+        $this->twigEnvironment = $twigEnvironment;
+    }
+
     /**
      * @param Request $request
      * @param mixed $data
@@ -130,5 +141,17 @@ class ResponseFactory
         int $code
     ): JsonResponse {
         return new JsonResponse($data, $code);
+    }
+
+    public function createViewResponse(
+        string $template,
+        array $params
+    ): Response {
+        $content = $this->twigEnvironment->render($template, $params);
+
+        $response = new Response();
+        $response->setContent($content);
+
+        return $response;
     }
 }
