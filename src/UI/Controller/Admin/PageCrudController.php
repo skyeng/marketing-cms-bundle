@@ -6,9 +6,7 @@ namespace Skyeng\MarketingCmsBundle\UI\Controller\Admin;
 
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Option\EA;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
-use Skyeng\MarketingCmsBundle\Domain\Entity\MediaFile;
 use Skyeng\MarketingCmsBundle\Domain\Entity\Page;
 use Skyeng\MarketingCmsBundle\Domain\Entity\PageOpenGraphData;
 use Skyeng\MarketingCmsBundle\Domain\Entity\PageSeoData;
@@ -30,6 +28,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use Skyeng\MarketingCmsBundle\UI\Service\Resolver\BlankPageFrontendUrlResolver;
+use Skyeng\MarketingCmsBundle\UI\Service\Resolver\PageFrontendUrlResolverInterface;
 
 class PageCrudController extends AbstractCrudController
 {
@@ -48,14 +48,21 @@ class PageCrudController extends AbstractCrudController
      */
     private $adminUrlGenerator;
 
+    /**
+     * @var PageFrontendUrlResolverInterface
+     */
+    private $pageFrontendUrlResolver;
+
     public function __construct(
         ResourceRepositoryInterface $resourceRepository,
         PageRepositoryInterface $pageRepository,
-        AdminUrlGenerator $adminUrlGenerator
+        AdminUrlGenerator $adminUrlGenerator,
+        PageFrontendUrlResolverInterface $pageFrontendUrlResolver
     ) {
         $this->resourceRepository = $resourceRepository;
         $this->pageRepository = $pageRepository;
         $this->adminUrlGenerator = $adminUrlGenerator;
+        $this->pageFrontendUrlResolver = $pageFrontendUrlResolver;
     }
 
     public static function getEntityFqcn(): string
@@ -88,6 +95,22 @@ class PageCrudController extends AbstractCrudController
 
         $actions->add(Crud::PAGE_EDIT, $mediaFilesAction);
         $actions->add(Crud::PAGE_NEW, $mediaFilesAction);
+
+        $pageFrontendUrlResolver = $this->pageFrontendUrlResolver;
+
+        if (!$pageFrontendUrlResolver instanceof BlankPageFrontendUrlResolver) {
+            $actions
+                ->add(
+                    Crud::PAGE_INDEX,
+                    Action::new('pageView', '', 'fa fa-eye')
+                        ->linkToUrl(
+                            function (Page $page) use ($pageFrontendUrlResolver) {
+                                return $pageFrontendUrlResolver->resolve($page);
+                            }
+                        )
+                        ->setHtmlAttributes(['target' => '_blank'])
+                );
+        }
 
         return $actions;
     }
