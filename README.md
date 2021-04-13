@@ -159,11 +159,11 @@ class CustomComponentType extends AbstractType implements DataTransformerInterfa
 
 * Добавить resolver и реализовать интерфейс Skyeng\MarketingCmsBundle\UI\Service\Resolver\PageFrontendUrlResolverInterface где метод resolve должен возвращать целый url
 
-* Прописать в services.yaml реализацию интерфейса:
+* Прописать в services.yaml реализацию интерфейса с алиасом cms_bundle_page_frontend_url_resolver:
 
     ```yaml
     # config/services.yaml
   
-    Skyeng\MarketingCmsBundle\UI\Service\Resolver\PageFrontendUrlResolverInterface:
+    cms_bundle_page_frontend_url_resolver:
       class: App\UI\Service\Resolver\PageFrontendUrlResolver
     ```

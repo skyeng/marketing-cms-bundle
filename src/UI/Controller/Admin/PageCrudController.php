@@ -28,7 +28,6 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
-use Skyeng\MarketingCmsBundle\UI\Service\Resolver\BlankPageFrontendUrlResolver;
 use Skyeng\MarketingCmsBundle\UI\Service\Resolver\PageFrontendUrlResolverInterface;
 
 class PageCrudController extends AbstractCrudController
@@ -56,12 +55,15 @@ class PageCrudController extends AbstractCrudController
     public function __construct(
         ResourceRepositoryInterface $resourceRepository,
         PageRepositoryInterface $pageRepository,
-        AdminUrlGenerator $adminUrlGenerator,
-        PageFrontendUrlResolverInterface $pageFrontendUrlResolver
+        AdminUrlGenerator $adminUrlGenerator
     ) {
         $this->resourceRepository = $resourceRepository;
         $this->pageRepository = $pageRepository;
         $this->adminUrlGenerator = $adminUrlGenerator;
+    }
+
+    public function setPageFrontendUrlResolver(?PageFrontendUrlResolverInterface $pageFrontendUrlResolver): void
+    {
         $this->pageFrontendUrlResolver = $pageFrontendUrlResolver;
     }
 
@@ -98,7 +100,7 @@ class PageCrudController extends AbstractCrudController
 
         $pageFrontendUrlResolver = $this->pageFrontendUrlResolver;
 
-        if (!$pageFrontendUrlResolver instanceof BlankPageFrontendUrlResolver) {
+        if ($pageFrontendUrlResolver !== null) {
             $actions
                 ->add(
                     Crud::PAGE_INDEX,
