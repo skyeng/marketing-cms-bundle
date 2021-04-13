@@ -108,6 +108,11 @@ class PageCrudController extends AbstractCrudController
                                 return $pageFrontendUrlResolver->resolve($page);
                             }
                         )
+                        ->displayIf(
+                            static function (Page $page) {
+                                return $page->isPublished();
+                            }
+                        )
                         ->setHtmlAttributes(['target' => '_blank'])
                 );
         }
