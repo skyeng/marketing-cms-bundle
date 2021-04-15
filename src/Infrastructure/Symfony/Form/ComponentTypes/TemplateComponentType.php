@@ -14,7 +14,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 class TemplateComponentType extends AbstractType implements DataTransformerInterface, ComponentTypeInterface
 {
     public const NAME = 'template-component';
-    private const TITLE = 'Шаблон';
+    private const TITLE = 'Готовый компонент';
 
     /**
      * @var TemplateRepositoryInterface
