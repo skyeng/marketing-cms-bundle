@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Skyeng\MarketingCmsBundle\Domain\Repository\TemplateRepository;
 
 use Skyeng\MarketingCmsBundle\Domain\Entity\Template;
+use Skyeng\MarketingCmsBundle\Domain\Repository\TemplateRepository\Exception\TemplateNotFoundException;
 use Skyeng\MarketingCmsBundle\Domain\Repository\TemplateRepository\Exception\TemplateRepositoryException;
 use Skyeng\MarketingCmsBundle\Domain\Entity\ValueObject\Id;
 
@@ -17,4 +18,11 @@ interface TemplateRepositoryInterface
      * @throws TemplateRepositoryException
      */
     public function getAll(): array;
+
+    /**
+     * @return Template
+     * @throws TemplateRepositoryException
+     * @throws TemplateNotFoundException
+     */
+    public function getById(string $id): Template;
 }

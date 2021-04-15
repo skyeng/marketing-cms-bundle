@@ -10,6 +10,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use Ramsey\Uuid\Uuid;
+use Skyeng\MarketingCmsBundle\Domain\Repository\TemplateRepository\Exception\TemplateNotFoundException;
 use Skyeng\MarketingCmsBundle\Domain\Repository\TemplateRepository\Exception\TemplateRepositoryException;
 use Skyeng\MarketingCmsBundle\Domain\Repository\TemplateRepository\TemplateRepositoryInterface;
 
@@ -30,6 +31,23 @@ class TemplateRepository extends ServiceEntityRepository implements TemplateRepo
     {
         try {
             return $this->findBy([]);
+        } catch (Exception $e) {
+            throw new TemplateRepositoryException($e->getMessage(), $e->getCode(), $e);
+        }
+    }
+
+    public function getById(string $id): Template
+    {
+        try {
+            $template = $this->findOneBy(['id' => $id]);
+
+            if (!$template) {
+                throw new TemplateNotFoundException();
+            }
+
+            return $template;
+        } catch (TemplateNotFoundException $e) {
+            throw $e;
         } catch (Exception $e) {
             throw new TemplateRepositoryException($e->getMessage(), $e->getCode(), $e);
         }

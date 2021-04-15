@@ -4,15 +4,21 @@ declare(strict_types=1);
 
 namespace Skyeng\MarketingCmsBundle\Application\Cms\Page\Assembler;
 
+use Generator;
 use Skyeng\MarketingCmsBundle\Application\Cms\Page\Dto\GetPageV1PageComponentDto;
 use Skyeng\MarketingCmsBundle\Application\Cms\Page\Dto\GetPageV1PageMetaTagDto;
 use Skyeng\MarketingCmsBundle\Application\Cms\Page\Dto\GetPageV1ResultDto;
 use Skyeng\MarketingCmsBundle\Application\Cms\Page\Dto\PageDto;
+use Skyeng\MarketingCmsBundle\Domain\Entity\AbstractComponent;
 use Skyeng\MarketingCmsBundle\Domain\Entity\Page;
 use Skyeng\MarketingCmsBundle\Domain\Entity\PageComponent;
 use Skyeng\MarketingCmsBundle\Domain\Entity\PageCustomMetaTag;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LoggerInterface;
+use Skyeng\MarketingCmsBundle\Domain\Entity\TemplateComponent;
+use Skyeng\MarketingCmsBundle\Domain\Repository\TemplateRepository\Exception\TemplateNotFoundException;
+use Skyeng\MarketingCmsBundle\Domain\Repository\TemplateRepository\TemplateRepositoryInterface;
+use Skyeng\MarketingCmsBundle\Infrastructure\Symfony\Form\ComponentTypes\TemplateComponentType;
 
 class GetPageV1ResultAssembler implements GetPageV1ResultAssemblerInterface
 {
@@ -35,9 +41,15 @@ class GetPageV1ResultAssembler implements GetPageV1ResultAssemblerInterface
         'og:image',
     ];
 
-    public function __construct(LoggerInterface $logger)
+    /**
+     * @var TemplateRepositoryInterface
+     */
+    private $templateRepository;
+
+    public function __construct(LoggerInterface $logger, TemplateRepositoryInterface $templateRepository)
     {
         $this->logger = $logger;
+        $this->templateRepository = $templateRepository;
     }
 
     public function assemble(Page $page): GetPageV1ResultDto
@@ -84,17 +96,14 @@ class GetPageV1ResultAssembler implements GetPageV1ResultAssemblerInterface
     private function createComponentsDtoArray(Page $page): array
     {
         $components = [];
+        $order = 0;
 
-        foreach ($page->getComponents() as $component) {
-            /** @var PageComponent $component */
-            if (!$component->isPublished()) {
-                continue;
-            }
-
+        foreach ($this->getPublishedPageComponentsGenerator($page) as $component) {
+            /** @var AbstractComponent $component */
             $components[] = new GetPageV1PageComponentDto(
                 $component->getName()->getValue(),
                 $component->getData(),
-                $component->getOrder(),
+                ++$order,
             );
         }
 
@@ -141,5 +150,51 @@ class GetPageV1ResultAssembler implements GetPageV1ResultAssemblerInterface
         $tags[] = new GetPageV1PageMetaTagDto(null, 'og:title', $openGraph->getTitle());
         $tags[] = new GetPageV1PageMetaTagDto(null, 'og:description', $openGraph->getDescription());
         $tags[] = new GetPageV1PageMetaTagDto(null, 'og:image', $openGraph->getImage());
+    }
+
+    private function getPublishedPageComponentsGenerator(Page $page): Generator
+    {
+        $components = $page->getComponents()->toArray();
+        usort(
+            $components,
+            static function (PageComponent $first, PageComponent $second) {
+                return $first->getOrder() > $second->getOrder();
+            }
+        );
+
+        foreach ($components as $component) {
+            /** @var PageComponent $component */
+            if (!$component->isPublished()) {
+                continue;
+            }
+
+            if ($component->getName()->getValue() !== TemplateComponentType::NAME) {
+                yield $component;
+            }
+
+            if (!array_key_exists('template', $component->getData())){
+                $this->logger->warning(
+                    'Template component has no template in data',
+                    ['templateComponentId' => $component->getId()->getValue()]
+                );
+                continue;
+            }
+
+            try {
+                $template = $this->templateRepository->getById($component->getData()['template']);
+            } catch (TemplateNotFoundException $e) {
+                $this->logger->warning('Template not found', ['template' => $component->getData()['template']]);
+                continue;
+            }
+
+            foreach ($template->getComponents() as $templateComponent) {
+                /** @var TemplateComponent $component */
+                if (!$templateComponent->isPublished()) {
+                    continue;
+                }
+
+                yield $templateComponent;
+            }
+        }
     }
 }
