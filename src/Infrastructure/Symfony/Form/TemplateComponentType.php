@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Skyeng\MarketingCmsBundle\Infrastructure\Symfony\Form;
 
-use phpDocumentor\Reflection\Types\Self_;
 use Psr\Log\LoggerInterface;
 use Skyeng\MarketingCmsBundle\Domain\Entity\TemplateComponent;
 use Skyeng\MarketingCmsBundle\Domain\Entity\ValueObject\PageComponentName;
@@ -12,7 +11,7 @@ use Skyeng\MarketingCmsBundle\Application\Cms\PageComponentType\Service\Componen
 use Skyeng\MarketingCmsBundle\Application\Cms\PageComponentType\Service\ComponentTypeResolver\ComponentTypeResolverInterface;
 use Skyeng\MarketingCmsBundle\Application\Cms\PageComponentType\Service\ComponentTypeResolver\Exception\ComponentTypeNotFoundException;
 use Skyeng\MarketingCmsBundle\Domain\Repository\TemplateComponentRepository\TemplateComponentRepositoryInterface;
-use Skyeng\MarketingCmsBundle\Infrastructure\Symfony\Form\ComponentTypes\TemplateComponentType as TemplateComponentForm;
+use Skyeng\MarketingCmsBundle\Infrastructure\Symfony\Form\ComponentTypes\TemplateComponentType as TemplateComponentTypeFormType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -56,12 +55,12 @@ class TemplateComponentType extends AbstractType
         $this->logger = $logger;
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $componentChoices = [];
 
         foreach ($this->componentTypes->getComponentTypes() as $componentType) {
-            if ($componentType instanceof TemplateComponentForm) {
+            if ($componentType instanceof TemplateComponentTypeFormType) {
                 continue;
             }
 
