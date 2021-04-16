@@ -52,4 +52,13 @@ class TemplateRepository extends ServiceEntityRepository implements TemplateRepo
             throw new TemplateRepositoryException($e->getMessage(), $e->getCode(), $e);
         }
     }
+
+    public function getByIds(array $ids): array
+    {
+        try {
+            return $this->findBy(['id' => $ids]);
+        } catch (Exception $e) {
+            throw new TemplateRepositoryException($e->getMessage(), $e->getCode(), $e);
+        }
+    }
 }

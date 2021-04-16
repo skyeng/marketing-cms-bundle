@@ -25,4 +25,11 @@ interface TemplateRepositoryInterface
      * @throws TemplateNotFoundException
      */
     public function getById(string $id): Template;
+
+    /**
+     * @param string[] $ids
+     * @return Template[]
+     * @throws TemplateRepositoryException
+     */
+    public function getByIds(array $ids): array;
 }
