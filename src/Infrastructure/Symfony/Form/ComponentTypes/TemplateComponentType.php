@@ -9,13 +9,12 @@ use Skyeng\MarketingCmsBundle\Domain\Repository\TemplateRepository\TemplateRepos
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 class TemplateComponentType extends AbstractType implements DataTransformerInterface, ComponentTypeInterface
 {
-    private const NAME = 'template-component';
-    private const TITLE = 'Шаблон';
+    public const NAME = 'template-component';
+    private const TITLE = 'Готовый компонент';
 
     /**
      * @var TemplateRepositoryInterface
