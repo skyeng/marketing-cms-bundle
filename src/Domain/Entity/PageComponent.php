@@ -7,7 +7,7 @@ namespace Skyeng\MarketingCmsBundle\Domain\Entity;
 use Skyeng\MarketingCmsBundle\Domain\Entity\ValueObject\PageComponentName;
 use Skyeng\MarketingCmsBundle\Domain\Entity\ValueObject\Id;
 
-class PageComponent
+class PageComponent extends AbstractComponent
 {
     use PublishedTrait;
 

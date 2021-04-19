@@ -33,10 +33,10 @@ class TemplateCrudController extends AbstractCrudController
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
-            ->setPageTitle(Crud::PAGE_INDEX, 'Шаблоны')
-            ->setPageTitle(Crud::PAGE_DETAIL, 'Шаблон')
-            ->setPageTitle(Crud::PAGE_NEW, 'Создать шаблон')
-            ->setPageTitle(Crud::PAGE_EDIT, 'Шаблон')
+            ->setPageTitle(Crud::PAGE_INDEX, 'Готовые компоненты')
+            ->setPageTitle(Crud::PAGE_DETAIL, 'Готовый компонент')
+            ->setPageTitle(Crud::PAGE_NEW, 'Создать готовый компонент')
+            ->setPageTitle(Crud::PAGE_EDIT, 'Готовый компонент')
             ->setPaginatorUseOutputWalkers(true);
     }
 
