@@ -150,3 +150,20 @@ class CustomComponentType extends AbstractType implements DataTransformerInterfa
     }
 }
 ```
+
+### Ссылка на frontend страницу
+
+В админке есть возможность перейти на frontend страницу через дополнительный пункт на списке cms страниц.
+
+Для этого нужно:
+
+* Добавить resolver и реализовать интерфейс Skyeng\MarketingCmsBundle\UI\Service\Resolver\PageFrontendUrlResolverInterface где метод resolve должен возвращать целый url
+
+* Прописать в services.yaml реализацию интерфейса с алиасом cms_bundle_page_frontend_url_resolver:
+
+    ```yaml
+    # config/services.yaml
+  
+    cms_bundle_page_frontend_url_resolver:
+      class: App\UI\Service\Resolver\PageFrontendUrlResolver
+    ```

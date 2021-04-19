@@ -16,3 +16,7 @@ services:
     class: Skyeng\MarketingCmsBundle\Application\EventListener\MediaFileUpdatedListener
     tags:
       - { name: kernel.event_listener, event: vich_uploader.pre_upload, method: onVichUploaderPreUpdate }
+
+  Skyeng\MarketingCmsBundle\UI\Controller\Admin\PageCrudController:
+    calls:
+      - setPageFrontendUrlResolver: ['@?cms_bundle_page_frontend_url_resolver']
