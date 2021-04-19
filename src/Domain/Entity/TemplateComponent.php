@@ -7,7 +7,7 @@ namespace Skyeng\MarketingCmsBundle\Domain\Entity;
 use Skyeng\MarketingCmsBundle\Domain\Entity\ValueObject\PageComponentName;
 use Skyeng\MarketingCmsBundle\Domain\Entity\ValueObject\Id;
 
-class PageComponent extends AbstractComponent
+class TemplateComponent extends AbstractComponent
 {
     use PublishedTrait;
 
@@ -17,9 +17,9 @@ class PageComponent extends AbstractComponent
     private $id;
 
     /**
-     * @var Page
+     * @var Template
      */
-    private $page;
+    private $template;
 
     /**
      * @var PageComponentName
@@ -36,10 +36,10 @@ class PageComponent extends AbstractComponent
      */
     private $order;
 
-    public function __construct(Id $id, ?Page $page, PageComponentName $name, array $data, int $order)
+    public function __construct(Id $id, ?Template $template, PageComponentName $name, array $data, int $order)
     {
         $this->id = $id;
-        $this->page = $page;
+        $this->template = $template;
         $this->name = $name;
         $this->data = $data;
         $this->order = $order;
@@ -50,14 +50,14 @@ class PageComponent extends AbstractComponent
         return $this->id;
     }
 
-    public function getPage(): Page
+    public function getTemplate(): Template
     {
-        return $this->page;
+        return $this->template;
     }
 
-    public function setPage(Page $page): void
+    public function setTemplate(Template $template): void
     {
-        $this->page = $page;
+        $this->template = $template;
     }
 
     public function getName(): PageComponentName

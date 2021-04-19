@@ -53,14 +53,18 @@ https://confluence.skyeng.tech/x/SLMhBQ
     ```php
     use Skyeng\MarketingCmsBundle\Domain\Entity\File;
     use Skyeng\MarketingCmsBundle\Domain\Entity\Redirect;
+    use Skyeng\MarketingCmsBundle\Domain\Entity\Page;
+    use Skyeng\MarketingCmsBundle\Domain\Entity\Template;
   
     class DashboardController extends AbstractDashboardController
     {
         public function configureMenuItems(): iterable
         {
             yield MenuItem::section('CMS');
+            yield MenuItem::linkToCrud('Страницы', 'fas fa-folder-open', Page::class);
             yield MenuItem::linkToCrud('Файлы', 'fas fa-folder-open', File::class);
             yield MenuItem::linkToCrud('Редиректы', 'fas fa-folder-open', Redirect::class);
+            yield MenuItem::linkToCrud('Шаблоны компонентов', 'fas fa-folder-open', Template::class);
         }
     }
     ```

@@ -30,6 +30,9 @@ $('body').on('change', '.page-component-name-select', function (event) {
             $('.data-loader').remove();
             $parentNode.append(html);
             $select.prop('disabled', false);
+            $('.field-select').select2({
+                theme: "bootstrap"
+            });
         },
         error: function (jqXHR, exception) {
             $('.data-loader').remove();
