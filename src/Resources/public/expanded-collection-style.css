@@ -16,4 +16,10 @@
 
 .expanded-collection .select2-selection {
     max-width: 100%;
+    min-height: 30px;
+    height: auto;
+}
+
+.component-preview-image {
+    max-height: 120px;
 }
