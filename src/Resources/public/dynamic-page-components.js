@@ -33,6 +33,7 @@ $('body').on('change', '.page-component-name-select', function (event) {
             $('.field-select').select2({
                 theme: "bootstrap"
             });
+            document.dispatchEvent(new Event('ea.collection.item-added'));
         },
         error: function (jqXHR, exception) {
             $('.data-loader').remove();
