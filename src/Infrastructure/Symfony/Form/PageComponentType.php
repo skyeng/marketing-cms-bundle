@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Skyeng\MarketingCmsBundle\Infrastructure\Symfony\Form;
 
 use Psr\Log\LoggerInterface;
+use Skyeng\MarketingCmsBundle\Application\Cms\PageComponentType\ComponentType\ComponentPreviewInterface;
 use Skyeng\MarketingCmsBundle\Domain\Entity\PageComponent;
 use Skyeng\MarketingCmsBundle\Domain\Entity\ValueObject\PageComponentName;
 use Skyeng\MarketingCmsBundle\Domain\Repository\PageComponentRepository\PageComponentRepositoryInterface;
@@ -57,9 +58,14 @@ class PageComponentType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $componentChoices = [];
+        $previewChoices = [];
 
         foreach ($this->componentTypes->getComponentTypes() as $componentType) {
             $componentChoices[$componentType->getTitle()] = $componentType->getName();
+
+            if ($componentType instanceof ComponentPreviewInterface) {
+                $previewChoices[$componentType->getTitle()] = ['preview' => $componentType->getPreview()];
+            }
         }
 
         $builder
@@ -73,7 +79,8 @@ class PageComponentType extends AbstractType
                     'data-widget' => 'select2',
                     'data-placeholder' => 'Выберите компонент',
                     'data-select' => 'true',
-                ]
+                ],
+                'choice_attr' => $previewChoices,
             ])
             ->add('order', IntegerType::class, [
                 'required' => true,

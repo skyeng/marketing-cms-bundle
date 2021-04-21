@@ -171,3 +171,8 @@ class CustomComponentType extends AbstractType implements DataTransformerInterfa
     cms_bundle_page_frontend_url_resolver:
       class: App\UI\Service\Resolver\PageFrontendUrlResolver
     ```
+
+### Добавление превью для компонентов
+
+Для добавления превью в компоненте нужно реализовать интерфейс Skyeng\MarketingCmsBundle\Application\Cms\PageComponentType\ComponentType\ComponentPreviewInterface.
+В интерфейсе есть метод getPreview() который должен вернуть относительную или полную ссылку на изображение.
