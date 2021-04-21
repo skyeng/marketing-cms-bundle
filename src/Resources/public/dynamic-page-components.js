@@ -25,6 +25,8 @@ $('body').on('change', '.page-component-name-select', function (event) {
             $dataForm.remove();
         },
         success: function(html) {
+            html = html.replaceAll('name="page_component', 'name="' + namePrefix);
+            html = html.replaceAll('id="page_component_', 'id="' + idPrefix + '_');
             html = html.replaceAll('name=&quot;page_component', 'name=&quot;' + namePrefix);
             html = html.replaceAll('id=&quot;page_component_', 'id=&quot;' + idPrefix + '_');
             $('.data-loader').remove();
