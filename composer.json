@@ -15,7 +15,8 @@
     "codeception/codeception": "^2.5",
     "doctrine/doctrine-fixtures-bundle": "^3.4",
     "doctrine/doctrine-migrations-bundle": "^3.0",
-    "nelmio/api-doc-bundle": "^3.6"
+    "nelmio/api-doc-bundle": "^3.6",
+    "symfony/maker-bundle": "^1.30"
   },
   "suggest": {
     "nelmio/api-doc-bundle": "Highly recommended for api documentation"
