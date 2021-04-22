@@ -22,4 +22,4 @@ services:
       - setPageFrontendUrlResolver: ['@?cms_bundle_page_frontend_url_resolver']
 
   Skyeng\MarketingCmsBundle\UI\Command\MakeComponentMaker:
-    arguments: ['%kernel.project_dir%']
+    arguments: ['@maker.generator']
