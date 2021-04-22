@@ -21,5 +21,5 @@ services:
     calls:
       - setPageFrontendUrlResolver: ['@?cms_bundle_page_frontend_url_resolver']
 
-  Skyeng\MarketingCmsBundle\Command\MakeComponentMaker:
+  Skyeng\MarketingCmsBundle\UI\Command\MakeComponentMaker:
     arguments: ['%kernel.project_dir%']
