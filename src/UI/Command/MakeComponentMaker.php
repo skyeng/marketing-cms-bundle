@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Skyeng\MarketingCmsBundle\Command;
+namespace Skyeng\MarketingCmsBundle\UI\Command;
 
 use Symfony\Bundle\MakerBundle\ConsoleStyle;
 use Symfony\Bundle\MakerBundle\DependencyBuilder;
@@ -102,7 +102,7 @@ class MakeComponentMaker extends AbstractMaker
 
     private function getContent(string $file, array $data): string
     {
-        $path = __DIR__ . '/../Resources/config/code-templates/' . $file;
+        $path = __DIR__ . '/../../Resources/config/code-templates/' . $file;
         $content = file_get_contents($path);
         return str_replace(array_keys($data), array_values($data), $content);
     }
