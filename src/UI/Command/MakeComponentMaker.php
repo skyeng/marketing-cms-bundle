@@ -53,7 +53,7 @@ class MakeComponentMaker extends AbstractMaker
 
     public static function getCommandName(): string
     {
-        return 'make:marketing-cms:api';
+        return 'make:marketing-cms:component';
     }
 
     public static function getCommandDescription(): string
