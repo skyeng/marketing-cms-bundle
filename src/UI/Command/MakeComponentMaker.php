@@ -76,7 +76,7 @@ class MakeComponentMaker extends AbstractMaker
 
         if (
             !preg_match(
-                '/^[a-z-]*$/',
+                '/^[a-z0-9-]*$/',
                 $name
             )
         ) {
