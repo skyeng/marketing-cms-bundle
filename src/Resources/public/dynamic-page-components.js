@@ -27,6 +27,8 @@ $('body').on('change', '.page-component-name-select', function (event) {
         success: function(html) {
             html = html.replaceAll('name="page_component', 'name="' + namePrefix);
             html = html.replaceAll('id="page_component_', 'id="' + idPrefix + '_');
+            html = html.replaceAll('name=&quot;page_component', 'name=&quot;' + namePrefix);
+            html = html.replaceAll('id=&quot;page_component_', 'id=&quot;' + idPrefix + '_');
             $('.data-loader').remove();
             $parentNode.append(html);
             $select.prop('disabled', false);
@@ -35,6 +37,7 @@ $('body').on('change', '.page-component-name-select', function (event) {
                 templateResult: formatState,
                 templateSelection: formatState,
             });
+            document.dispatchEvent(new Event('ea.collection.item-added'));
         },
         error: function (jqXHR, exception) {
             $('.data-loader').remove();

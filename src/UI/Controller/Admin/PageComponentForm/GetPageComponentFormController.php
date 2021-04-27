@@ -68,7 +68,7 @@ class GetPageComponentFormController extends AbstractController
             [
                 'form' => $result->result->createView(),
                 'themes' => [
-                    '@EasyAdmin/crud/form_theme.html.twig',
+                    '@MarketingCms/EasyAdmin/crud/form_theme.html.twig',
                 ],
             ]
         );
