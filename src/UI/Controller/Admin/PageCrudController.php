@@ -119,6 +119,22 @@ class PageCrudController extends AbstractCrudController
                 );
         }
 
+        $actions->add(
+            Crud::PAGE_INDEX,
+            Action::new('clonePage', false, 'fa fa-clone')
+                ->linkToRoute(
+                    'clone_page',
+                    static function (Page $page) {
+                        return [
+                            'id' => $page->getId()->getValue(),
+                        ];
+                    }
+                )
+                ->setHtmlAttributes([
+                    'onclick' => 'return confirm("Вы действительно хотите склонировать эту страницу?")',
+                ])
+        );
+
         return $actions;
     }
 

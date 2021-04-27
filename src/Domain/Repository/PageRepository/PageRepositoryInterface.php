@@ -26,4 +26,14 @@ interface PageRepositoryInterface
      * @throws PageNotFoundException
      */
     public function getByUri(string $uri, ?bool $published = null): Page;
+
+    /**
+     * @param string $id
+     * @return Page
+     * @throws PageRepositoryException
+     * @throws PageNotFoundException
+     */
+    public function getById(string $id): Page;
+
+    public function save(Page $page): void;
 }
