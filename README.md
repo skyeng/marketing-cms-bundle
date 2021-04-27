@@ -171,3 +171,18 @@ class CustomComponentType extends AbstractType implements DataTransformerInterfa
     cms_bundle_page_frontend_url_resolver:
       class: App\UI\Service\Resolver\PageFrontendUrlResolver
     ```
+
+### Добавление превью для компонентов
+
+Для добавления превью в компоненте нужно реализовать интерфейс Skyeng\MarketingCmsBundle\Application\Cms\PageComponentType\ComponentType\ComponentPreviewInterface.
+В интерфейсе есть метод getPreview() который должен вернуть относительную или полную ссылку на изображение.
+
+### Генерация компонентов
+
+Для генерации компонентов достаточно вызвать команду bin/console make:marketing-cms:component, после чего нужно указать следующие поля:
+
+* Название компонента в формате name-component или name-component-v2
+
+* Заголовок компонента в любом виде, этот заголовок будет выводиться в селекторе выбора компонента в админке
+
+* Поля компонента по порядку, можно выбрать название поля, его тип и может ли он быть пустым (nullable)

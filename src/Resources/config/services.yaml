@@ -20,3 +20,6 @@ services:
   Skyeng\MarketingCmsBundle\UI\Controller\Admin\PageCrudController:
     calls:
       - setPageFrontendUrlResolver: ['@?cms_bundle_page_frontend_url_resolver']
+
+  Skyeng\MarketingCmsBundle\UI\Command\MakeComponentMaker:
+    arguments: ['@maker.generator']
