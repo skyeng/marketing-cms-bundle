@@ -156,6 +156,9 @@ class Page
         $this->pageOpenGraphData = $pageOpenGraphData;
     }
 
+    /**
+     * @return PageCustomMetaTag[]
+     */
     public function getCustomMetaTags(): Collection
     {
         return $this->customMetaTags;
@@ -172,6 +175,9 @@ class Page
         $this->customMetaTags->removeElement($customMetaTag);
     }
 
+    /**
+     * @return PageComponent[]
+     */
     public function getComponents(): Collection
     {
         return $this->components;

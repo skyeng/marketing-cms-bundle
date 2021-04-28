@@ -64,4 +64,28 @@ class PageRepository extends ServiceEntityRepository implements PageRepositoryIn
             throw new PageRepositoryException($e->getMessage(), $e->getCode(), $e);
         }
     }
+
+    public function getById(string $id): Page
+    {
+        try {
+            /** @var Page $page */
+            $page = $this->findOneBy(['id' => $id]);
+
+            if ($page === null) {
+                throw new PageNotFoundException();
+            }
+
+            return $page;
+        } catch (PageNotFoundException $e) {
+            throw $e;
+        } catch (Exception $e) {
+            throw new PageRepositoryException($e->getMessage(), $e->getCode(), $e);
+        }
+    }
+
+    public function save(Page $page): void
+    {
+        $this->getEntityManager()->persist($page);
+        $this->getEntityManager()->flush($page);
+    }
 }
