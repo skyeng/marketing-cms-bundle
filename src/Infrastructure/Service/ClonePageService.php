@@ -147,31 +147,35 @@ class ClonePageService implements ClonePageServiceInterface
 
     private function clonePageSeoDataToNewPage(Page $page, Page $newPage): void
     {
-        if ($page->getPageSeoData()) {
-            $seoData = new PageSeoData(
-                $newPage,
-                $page->getPageSeoData()->getTitle(),
-                $page->getPageSeoData()->getDescription(),
-                $page->getPageSeoData()->getKeywords(),
-                $page->getPageSeoData()->isNoFollow(),
-                $page->getPageSeoData()->isNoIndex(),
-            );
-            $newPage->setPageSeoData($seoData);
+        if ($page->getPageSeoData() === null) {
+            return;
         }
+
+        $seoData = new PageSeoData(
+            $newPage,
+            $page->getPageSeoData()->getTitle(),
+            $page->getPageSeoData()->getDescription(),
+            $page->getPageSeoData()->getKeywords(),
+            $page->getPageSeoData()->isNoFollow(),
+            $page->getPageSeoData()->isNoIndex(),
+        );
+        $newPage->setPageSeoData($seoData);
     }
 
     private function clonePageOpenGraphDataToNewPage(Page $page, Page $newPage): void
     {
-        if ($page->getPageOpenGraphData()) {
-            $openGraphData = new PageOpenGraphData(
-                $newPage,
-                $page->getPageOpenGraphData()->getType(),
-                $page->getPageOpenGraphData()->getUrl(),
-                $page->getPageOpenGraphData()->getTitle(),
-                $page->getPageOpenGraphData()->getImage(),
-                $page->getPageOpenGraphData()->getDescription(),
-            );
-            $newPage->setPageOpenGraphData($openGraphData);
+        if ($page->getPageOpenGraphData() === null) {
+            return;
         }
+
+        $openGraphData = new PageOpenGraphData(
+            $newPage,
+            $page->getPageOpenGraphData()->getType(),
+            $page->getPageOpenGraphData()->getUrl(),
+            $page->getPageOpenGraphData()->getTitle(),
+            $page->getPageOpenGraphData()->getImage(),
+            $page->getPageOpenGraphData()->getDescription(),
+        );
+        $newPage->setPageOpenGraphData($openGraphData);
     }
 }

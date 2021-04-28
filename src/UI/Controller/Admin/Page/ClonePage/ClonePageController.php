@@ -48,7 +48,7 @@ class ClonePageController extends AbstractController
     }
 
     /**
-     * Удалить статью
+     * Склонировать страницу
      *
      * @Route("/admin/page/clone", name="clone_page", methods={"GET"})
      *
