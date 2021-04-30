@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Skyeng\MarketingCmsBundle\UI\Controller\Admin\Page\ClonePage;
 
-use App\Controller\Admin\ArticleCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Skyeng\MarketingCmsBundle\Application\Exception\ValidationException;
 use Skyeng\MarketingCmsBundle\Application\Pages\ClonePage\ClonePageService;

@@ -32,4 +32,6 @@ interface TemplateRepositoryInterface
      * @throws TemplateRepositoryException
      */
     public function getByIds(array $ids): array;
+
+    public function save(Template $template): void;
 }

@@ -61,4 +61,10 @@ class TemplateRepository extends ServiceEntityRepository implements TemplateRepo
             throw new TemplateRepositoryException($e->getMessage(), $e->getCode(), $e);
         }
     }
+
+    public function save(Template $template): void
+    {
+        $this->getEntityManager()->persist($template);
+        $this->getEntityManager()->flush($template);
+    }
 }
