@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Skyeng\MarketingCmsBundle\Infrastructure\Symfony\Form;
 
 use Psr\Log\LoggerInterface;
+use Skyeng\MarketingCmsBundle\Application\Cms\PageComponentType\ComponentType\ComponentPreviewInterface;
 use Skyeng\MarketingCmsBundle\Domain\Entity\TemplateComponent;
 use Skyeng\MarketingCmsBundle\Domain\Entity\ValueObject\PageComponentName;
 use Skyeng\MarketingCmsBundle\Application\Cms\PageComponentType\Service\ComponentTypeCollection\ComponentTypeCollectionInterface;
@@ -58,6 +59,7 @@ class TemplateComponentType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $componentChoices = [];
+        $previewChoices = [];
 
         foreach ($this->componentTypes->getComponentTypes() as $componentType) {
             if ($componentType instanceof TemplateComponentTypeFormType) {
@@ -65,6 +67,10 @@ class TemplateComponentType extends AbstractType
             }
 
             $componentChoices[$componentType->getTitle()] = $componentType->getName();
+
+            if ($componentType instanceof ComponentPreviewInterface) {
+                $previewChoices[$componentType->getTitle()] = ['preview' => $componentType->getPreview()];
+            }
         }
 
         $builder
@@ -78,7 +84,8 @@ class TemplateComponentType extends AbstractType
                     'data-widget' => 'select2',
                     'data-placeholder' => 'Выберите компонент',
                     'data-select' => 'true',
-                ]
+                ],
+                'choice_attr' => $previewChoices,
             ])
             ->add('order', IntegerType::class, [
                 'required' => true,
