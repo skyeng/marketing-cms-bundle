@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Skyeng\MarketingCmsBundle\Infrastructure\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\ORMException;
-use Doctrine\ORM\ORMInvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Skyeng\MarketingCmsBundle\Domain\Entity\Page;
 use Skyeng\MarketingCmsBundle\Domain\Entity\PageComponent;
@@ -23,6 +21,7 @@ use Skyeng\MarketingCmsBundle\Domain\Repository\ResourceRepository\ResourceRepos
 use Skyeng\MarketingCmsBundle\Domain\Service\ClonePageService\ClonePageServiceInterface;
 use Skyeng\MarketingCmsBundle\Domain\Entity\Resource as ResourceEntity;
 use Skyeng\MarketingCmsBundle\Domain\Service\ClonePageService\Exception\ClonePageServiceException;
+use Throwable;
 
 class ClonePageService implements ClonePageServiceInterface
 {
@@ -95,7 +94,7 @@ class ClonePageService implements ClonePageServiceInterface
             $this->repository->save($newPage);
 
             $this->em->commit();
-        } catch (ORMException | ORMInvalidArgumentException $e) {
+        } catch (Throwable $e) {
             $this->em->rollback();
             $this->logger->error('Произошла ошибка во время клонирования страницы', [
                 'message' => $e->getMessage(),

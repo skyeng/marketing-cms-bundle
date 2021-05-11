@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Skyeng\MarketingCmsBundle\UI\Controller\Admin;
 
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use Skyeng\MarketingCmsBundle\Domain\Entity\Template;
 use Skyeng\MarketingCmsBundle\Domain\Repository\TemplateRepository\TemplateRepositoryInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -73,5 +75,26 @@ class TemplateCrudController extends AbstractCrudController
             $this->templateRepository->getNextIdentity(),
             ''
         );
+    }
+
+    public function configureActions(Actions $actions): Actions
+    {
+        $actions->add(
+            Crud::PAGE_INDEX,
+            Action::new('cloneTemplate', false, 'fa fa-clone')
+                ->linkToRoute(
+                    'clone_template',
+                    static function (Template $template) {
+                        return [
+                            'id' => $template->getId()->getValue(),
+                        ];
+                    }
+                )
+                ->setHtmlAttributes([
+                    'onclick' => 'return confirm("Вы действительно хотите склонировать этот готовый компонент?")',
+                ])
+        );
+
+        return parent::configureActions($actions);
     }
 }
