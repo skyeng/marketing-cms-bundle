@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Skyeng\MarketingCmsBundle\Infrastructure\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\ORMException;
-use Doctrine\ORM\ORMInvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Skyeng\MarketingCmsBundle\Domain\Entity\Template;
 use Skyeng\MarketingCmsBundle\Domain\Entity\TemplateComponent;
@@ -14,6 +12,7 @@ use Skyeng\MarketingCmsBundle\Domain\Repository\TemplateComponentRepository\Temp
 use Skyeng\MarketingCmsBundle\Domain\Repository\TemplateRepository\TemplateRepositoryInterface;
 use Skyeng\MarketingCmsBundle\Domain\Service\CloneTemplateService\CloneTemplateServiceInterface;
 use Skyeng\MarketingCmsBundle\Domain\Service\CloneTemplateService\Exception\CloneTemplateServiceException;
+use Throwable;
 
 class CloneTemplateService implements CloneTemplateServiceInterface
 {
@@ -63,7 +62,7 @@ class CloneTemplateService implements CloneTemplateServiceInterface
 
             $this->repository->save($newTemplate);
             $this->em->commit();
-        } catch (ORMException | ORMInvalidArgumentException $e) {
+        } catch (Throwable $e) {
             $this->em->rollback();
             $this->logger->error('Произошла ошибка во время клонирования готового компонента', [
                 'message' => $e->getMessage(),
