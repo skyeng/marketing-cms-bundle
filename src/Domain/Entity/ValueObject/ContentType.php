@@ -11,6 +11,8 @@ class ContentType
 {
     public const TEXT_TYPE = 'text/plain';
     public const JSON_TYPE = 'application/json';
+    public const HTML_TYPE = 'text/html';
+    public const XML_TYPE = 'text/xml';
 
     public const AVAILABLE_TYPES = [
         self::TEXT_TYPE => self::TEXT_TYPE,
@@ -32,6 +34,16 @@ class ContentType
     }
 
     public function isJsonType(): bool
+    {
+        return $this->value === self::JSON_TYPE;
+    }
+
+    public function isHtmlType(): bool
+    {
+        return $this->value === self::JSON_TYPE;
+    }
+
+    public function isXMLType(): bool
     {
         return $this->value === self::JSON_TYPE;
     }
