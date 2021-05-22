@@ -35,7 +35,8 @@ class FileCrudController extends AbstractCrudController
     public function __construct(
         FileRepositoryInterface $fileRepository,
         ResourceRepositoryInterface $resourceRepository
-    ) {
+    )
+    {
         $this->fileRepository = $fileRepository;
         $this->resourceRepository = $resourceRepository;
     }
@@ -58,8 +59,14 @@ class FileCrudController extends AbstractCrudController
     {
         $resource = ResourceField::new('resource.uri', 'Ссылка');
         $content = TextareaField::new('content', 'Контент файла');
-        $type = ChoiceField::new('contentType', 'Тип контента')
-            ->setChoices(['Json' => ContentType::JSON_TYPE, 'Текст' => ContentType::TEXT_TYPE])
+        $type = ChoiceField::new('contentType', 'Content-type')
+            ->setChoices([
+                    ContentType::HTML_TYPE => ContentType::HTML_TYPE,
+                    ContentType::TEXT_TYPE => ContentType::TEXT_TYPE,
+                    ContentType::XML_TYPE => ContentType::XML_TYPE,
+                    ContentType::JSON_TYPE => ContentType::JSON_TYPE,
+                ]
+            )
             ->setFormType(ContentTypeType::class);
         $cacheTime = ChoiceField::new('cacheTime', 'Время кэша')
             ->setChoices(['1ч' => CacheTime::CACHE_TIME_1H, '30мин' => CacheTime::CACHE_TIME_30M])
