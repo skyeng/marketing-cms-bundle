@@ -15,7 +15,9 @@ class ContentType
     public const XML_TYPE = 'text/xml';
 
     public const AVAILABLE_TYPES = [
+        self::HTML_TYPE => self::HTML_TYPE,
         self::TEXT_TYPE => self::TEXT_TYPE,
+        self::XML_TYPE => self::XML_TYPE,
         self::JSON_TYPE => self::JSON_TYPE,
     ];
 
