@@ -40,11 +40,11 @@ class ContentType
 
     public function isHtmlType(): bool
     {
-        return $this->value === self::JSON_TYPE;
+        return $this->value === self::HTML_TYPE;
     }
 
     public function isXMLType(): bool
     {
-        return $this->value === self::JSON_TYPE;
+        return $this->value === self::XML_TYPE;
     }
 }
