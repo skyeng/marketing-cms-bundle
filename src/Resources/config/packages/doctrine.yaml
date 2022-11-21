@@ -6,13 +6,16 @@ doctrine:
       cms_resource_type: 'Skyeng\MarketingCmsBundle\Infrastructure\Doctrine\Type\ResourceType'
       cms_content_type: 'Skyeng\MarketingCmsBundle\Infrastructure\Doctrine\Type\ContentType'
       cms_cache_time: 'Skyeng\MarketingCmsBundle\Infrastructure\Doctrine\Type\CacheTimeType'
-      page_component_name: 'Skyeng\MarketingCmsBundle\Infrastructure\Doctrine\Type\PageComponentNameType'
+      component_name: 'Skyeng\MarketingCmsBundle\Infrastructure\Doctrine\Type\ComponentNameType'
       cms_media_file_storage: 'Skyeng\MarketingCmsBundle\Infrastructure\Doctrine\Type\MediaFileStorageType'
       cms_media_file_type: 'Skyeng\MarketingCmsBundle\Infrastructure\Doctrine\Type\MediaFileType'
 
   orm:
     entity_managers:
       default:
+        dql:
+          string_functions:
+            JSON_GET_TEXT: Scienta\DoctrineJsonFunctions\Query\AST\Functions\Postgresql\JsonGetText
         mappings:
           MarketingCmsBundle:
             type: xml

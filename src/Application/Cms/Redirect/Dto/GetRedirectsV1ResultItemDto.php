@@ -4,32 +4,23 @@ declare(strict_types=1);
 
 namespace Skyeng\MarketingCmsBundle\Application\Cms\Redirect\Dto;
 
-use Swagger\Annotations as SWG;
+use OpenApi\Annotations as OA;
 
 class GetRedirectsV1ResultItemDto
 {
-    /**
-     * @var string
-     * @SWG\Property(example="/from-some-url")
-     */
-    public $from;
-
-    /**
-     * @var string
-     * @SWG\Property(example="https://to-some-url.example")
-     */
-    public $to;
-
-    /**
-     * @var int
-     * @SWG\Property(example=301)
-     */
-    public $httpCode;
-
-    public function __construct(string $from, string $to, int $httpCode)
-    {
-        $this->from = $from;
-        $this->to = $to;
-        $this->httpCode = $httpCode;
+    public function __construct(
+        /**
+         * @OA\Property(example="/from-some-url")
+         */
+        public string $from,
+        /**
+         * @OA\Property(example="https://to-some-url.example")
+         */
+        public string $to,
+        /**
+         * @OA\Property(example=301)
+         */
+        public int $httpCode
+    ) {
     }
 }

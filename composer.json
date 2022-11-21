@@ -3,20 +3,38 @@
   "description": "Marketing CMS Bundle",
   "type": "symfony-bundle",
   "require": {
-    "php": "^7.3.3",
-    "easycorp/easyadmin-bundle": "^3.2",
+    "php": "^8.0",
+    "easycorp/easyadmin-bundle": "^3.2|^4.0",
+    "nelmio/api-doc-bundle": "^4.0",
     "psr/http-message": "*",
     "ramsey/uuid": "^4.1",
     "ramsey/uuid-doctrine": "^1.6",
-    "symfony/validator": "4.4.*",
+    "scienta/doctrine-json-functions": "^4.5",
+    "symfony/serializer": "^5.3",
+    "symfony/validator": "^5.3",
     "vich/uploader-bundle": "^1.16"
   },
   "require-dev": {
-    "codeception/codeception": "^2.5",
+    "codeception/codeception": "^4.1",
+    "codeception/module-asserts": "^1.3",
+    "codeception/module-doctrine2": "^1.1",
+    "codeception/module-rest": "^1.4",
+    "codeception/module-symfony": "^2.0",
     "doctrine/doctrine-fixtures-bundle": "^3.4",
     "doctrine/doctrine-migrations-bundle": "^3.0",
-    "nelmio/api-doc-bundle": "^3.6",
-    "symfony/maker-bundle": "^1.30"
+    "friendsofphp/php-cs-fixer": "3.1.*",
+    "phpstan/extension-installer": "^1.1",
+    "phpstan/phpstan": "^1.8",
+    "phpstan/phpstan-doctrine": "^1.3",
+    "phpstan/phpstan-symfony": "^1.2",
+    "qossmic/deptrac-shim": "^0.24.0",
+    "rector/rector": "^0.14",
+    "symfony/dotenv": "5.4.*",
+    "symfony/maker-bundle": "^1.30",
+    "symfony/monolog-bridge": "^5.4",
+    "symfony/monolog-bundle": "^3.0",
+    "symfony/runtime": "5.4.*",
+    "vimeo/psalm": "^4.26"
   },
   "suggest": {
     "nelmio/api-doc-bundle": "Highly recommended for api documentation"
@@ -24,11 +42,13 @@
   "autoload": {
     "psr-4": {
       "Skyeng\\MarketingCmsBundle\\": "src/",
-      "DoctrineMigrations\\": "src/Infrastructure/Doctrine/Migrations/"
+      "Skyeng\\MarketingCmsBundle\\Utils\\Rector\\": "utils/rector/src"
     }
   },
   "autoload-dev": {
     "psr-4": {
+      "Skyeng\\MarketingCmsBundle\\Utils\\SymfonyApplication\\": "utils/symfony-application/src/",
+      "Skyeng\\MarketingCmsBundle\\Utils\\SymfonyApplication\\DoctrineMigrations\\": "utils/symfony-application/migrations/",
       "Skyeng\\MarketingCmsBundle\\Tests\\": [
         "tests/",
         "tests/_support/"
@@ -36,10 +56,49 @@
       "Skyeng\\MarketingCmsBundle\\Tests\\Api\\": "tests/api/",
       "Skyeng\\MarketingCmsBundle\\Tests\\Functional\\": "tests/functional/",
       "Skyeng\\MarketingCmsBundle\\Tests\\Integrational\\": "tests/integrational/",
-      "Skyeng\\MarketingCmsBundle\\Tests\\Unit\\": "tests/unit/"
+      "Skyeng\\MarketingCmsBundle\\Tests\\Unit\\": "tests/unit/",
+      "Skyeng\\MarketingCmsBundle\\Utils\\Rector\\Tests\\": "utils/rector/tests/"
     }
   },
   "config": {
-    "sort-packages": true
-  }
+    "sort-packages": true,
+    "allow-plugins": {
+      "phpstan/extension-installer": true,
+      "symfony/runtime": true
+    }
+  },
+  "scripts": {
+    "codecept": "vendor/bin/codecept run --env=test",
+    "symfony:clear-cache": "utils/symfony-application/bin/console cache:clear --env=test",
+    "rector": "vendor/bin/rector process --clear-cache --config=utils/rector/rector.php",
+    "phpstan": "vendor/bin/phpstan analyse --memory-limit=2G -c utils/phpstan/phpstan.neon",
+    "psalm": "vendor/bin/psalm --config=utils/psalm/psalm.xml --show-info=false --no-cache --threads=8 --no-progress --output-format=console",
+    "deptrac": "vendor/bin/deptrac --no-cache --config-file=utils/deptrac/deptrac.yaml",
+    "php-cs-fixer": "vendor/bin/php-cs-fixer fix -v --config=utils/php-cs-fixer/.php-cs-fixer.php --using-cache=no"
+  },
+  "extra": {
+    "bin-dir": "utils/symfony-application/bin",
+    "config-dir": "utils/symfony-application/config",
+    "public-dir": "utils/symfony-application/public",
+    "src-dir": "utils/symfony-application/src",
+    "var-dir": "utils/symfony-application/var",
+    "runtime": {
+      "dotenv_path": "utils/symfony-application/.env"
+    },
+    "symfony": {
+      "require": "5.4.*"
+    }
+  },
+  "archive": {
+    "exclude": ["/tests"]
+  },
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://artifactory.skyeng.link/artifactory/api/composer/composer-cache"
+    },
+    {
+      "packagist": false
+    }
+  ]
 }

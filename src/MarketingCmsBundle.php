@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Skyeng\MarketingCmsBundle;
 
-use Skyeng\MarketingCmsBundle\Infrastructure\DependencyInjection\MarketingCmsExtension;
-use Skyeng\MarketingCmsBundle\Infrastructure\Symfony\DependencyInjection\ComponentTypeCollectionCompilerPass;
-use Skyeng\MarketingCmsBundle\Application\Cms\PageComponentType\ComponentType\ComponentTypeInterface;
+use Skyeng\MarketingCmsBundle\Domain\Service\Hook\HookInterface;
+use Skyeng\MarketingCmsBundle\Infrastructure\Symfony\DependencyInjection\CompilerPass\HookCollectionCompilerPass;
+use Skyeng\MarketingCmsBundle\Infrastructure\Symfony\DependencyInjection\MarketingCmsExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
@@ -21,7 +21,7 @@ class MarketingCmsBundle extends Bundle
     {
         parent::build($container);
 
-        $container->registerForAutoconfiguration(ComponentTypeInterface::class)->addTag('cms_component_type');
-        $container->addCompilerPass(new ComponentTypeCollectionCompilerPass());
+        $container->registerForAutoconfiguration(HookInterface::class)->addTag('marketing_cms_hook');
+        $container->addCompilerPass(new HookCollectionCompilerPass());
     }
 }

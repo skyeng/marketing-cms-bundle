@@ -4,18 +4,17 @@ declare(strict_types=1);
 
 namespace Skyeng\MarketingCmsBundle\Application\Cms\File\Dto;
 
-use Swagger\Annotations as SWG;
+use OpenApi\Annotations as OA;
 
 /**
- * @SWG\Definition(
+ * @OA\Schema(
  *     required={"uri"}
  * )
  */
 class GetFileV1RequestDto
 {
     /**
-     * @var string
-     * @SWG\Property(example="/test.txt")
+     * @OA\Property(example="/test.txt")
      */
-    public $uri;
+    public string $uri;
 }

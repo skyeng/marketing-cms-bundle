@@ -1,0 +1,166 @@
+workflow:
+  rules:
+    # запускаем для merge-request'ов
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    # запускаем по кнопке
+    - if: '$CI_PIPELINE_SOURCE == "web"'
+    # запускаем при мерже в мастер
+    - if: '$CI_COMMIT_BRANCH == "master"'
+    # запускаем через api запросы
+    - if: '$CI_PIPELINE_SOURCE == "api"'
+
+stages:
+  - code-style
+  - code-quality
+  - test
+
+variables:
+  PROJECT_NAME: marketing-solutions/marketing-cms-bundle
+  GITLAB_SERVICE_DIND: registry.skyeng.tv/infra/docker:20-dind
+  DEFAULT_DOCKER_IMAGE: registry.skyeng.tv/infra/gitlab-executor:0.0.15
+
+image: ${DEFAULT_DOCKER_IMAGE}
+
+.abstract-docker-in-docker:
+  stage: test
+  services:
+    - name: ${GITLAB_SERVICE_DIND}
+      alias: docker
+  tags:
+    - docker
+  allow_failure: false
+  before_script:
+    - $(require registry composer)
+
+static-analysis:
+  extends: .abstract-docker-in-docker
+  stage: code-quality
+  script:
+    - docker-compose up -d
+    - docker-compose exec -e GITLAB_TOKEN=${GITLAB_TOKEN} -T php-fpm composer config --auth gitlab-oauth.gitlab.skyeng.link $GITLAB_TOKEN
+    - docker-compose exec -T php-fpm composer install --prefer-dist --no-progress -o
+
+    - echo 'Deptrac analysis'
+    - docker-compose exec -T php-fpm php -d memory_limit=-1 vendor/bin/deptrac --no-cache --config-file=utils/deptrac/deptrac.yaml
+
+    - echo 'PHPStan analysis'
+    - docker-compose exec -T php-fpm php -d memory_limit=-1 vendor/bin/phpstan analyse --memory-limit=2G -c utils/phpstan/phpstan.neon
+
+    - echo 'Psalm analysis'
+    - docker-compose exec -T php-fpm php -d memory_limit=-1 vendor/bin/psalm --config=utils/psalm/psalm.xml --show-info=false --no-cache --threads=8 --no-progress --output-format=console
+
+    - echo 'Rector analysis'
+    - docker-compose exec -T php-fpm php -d memory_limit=-1 vendor/bin/rector process --clear-cache --config=utils/rector/rector.php --dry-run
+
+php-cs-fixer:
+  extends: .abstract-docker-in-docker
+  stage: code-style
+  allow_failure: false
+  image:
+    name: registry.skyeng.tv/infra/php-cs-fixer:0.0.7
+    entrypoint: ['']
+  variables:
+    ALLOW_ALLOW_RISKY: 'yes'
+    DIFF_FORMAT: 'udiff'
+    FIXER_CONFIG: utils/php-cs-fixer/.php-cs-fixer.php
+    USING_CACHE: 'no'
+    COMPARISON_BRANCH: ${CI_MERGE_REQUEST_TARGET_BRANCH_NAME}
+    GREP_FILTER: \.php$
+    GIT_AUTHOR_NAME: 'Gitlab Robot'
+    GIT_AUTHOR_EMAIL: 'gitlab@skyeng.ru'
+  script:
+    - setup_remote
+    - php-cs-fixer fix --diff --using-cache=$USING_CACHE --allow-risky=$ALLOW_ALLOW_RISKY --config=$FIXER_CONFIG
+    - "bot_commit_and_push '[AUTO] apply phpcs changes'"
+  except:
+    - /master/
+  before_script:
+    - !reference [.git_tools, before_script]
+  only:
+    - merge_requests
+
+lint-yaml:
+  extends: .abstract-docker-in-docker
+  stage: code-style
+  allow_failure: false
+  variables:
+    BASE_CONFIG_YAMLLINT: |
+      ---
+      extends: default
+      rules:
+        line-length: disable
+        document-start: disable
+        braces:
+          min-spaces-inside: 0
+          max-spaces-inside: 1
+      ignore: |
+        vendor/
+  image: registry.skyeng.tv/infra/yamllint
+  before_script:
+    - echo -n "$BASE_CONFIG_YAMLLINT" > .yamllint
+    - cat .yamllint
+  script:
+    - yamllint .
+
+test:
+  extends: .abstract-docker-in-docker
+  allow_failure: false
+  artifacts:
+    when: always
+    paths:
+      - tests/_output
+    reports:
+      junit: tests/_output/report.xml
+  parallel:
+    matrix:
+      - SYMFONY_VERSION: ['5.4.10']
+
+  script:
+    - docker-compose up -d
+    - docker-compose exec -e GITLAB_TOKEN=${GITLAB_TOKEN} -T php-fpm composer config --auth gitlab-oauth.gitlab.skyeng.link $GITLAB_TOKEN
+    - docker-compose exec -T php-fpm composer install --prefer-dist --no-progress -o
+    - docker-compose exec -T php-fpm rm -f composer.lock
+    - docker-compose exec -T php-fpm composer require symfony/framework-bundle=~${SYMFONY_VERSION} -W
+    - docker-compose exec -T php-fpm utils/symfony-application/bin/console d:m:m -n
+    - docker-compose exec -T php-fpm utils/symfony-application/bin/console a:i -n
+    - docker-compose exec -e SYMFONY_VERSION=${SYMFONY_VERSION} -T php-fpm php vendor/bin/codecept run --xml=report.xml
+
+.git_tools:
+  before_script:
+    - |
+      function setup_remote() {
+        git remote set-url origin $( echo $CI_REPOSITORY_URL | sed "s/https:\/\/.*@/https:\/\/$AUTO_COMMITER_USERNAME:$AUTO_COMMITER_TOKEN@/g" )
+      }
+      function get_ancestor_commit_sha() {
+        if [[ -z "$COMPARISON_BRANCH" ]]; then exit 0; fi;
+        git fetch --deepen=20 origin $COMPARISON_BRANCH
+        while ! ancestor_commit_sha=$( git merge-base origin/$COMPARISON_BRANCH $CI_COMMIT_SHA ); do
+          git fetch --deepen=20 origin $COMPARISON_BRANCH
+          git fetch --deepen=20 origin $CI_COMMIT_REF_NAME
+        done
+        echo $ancestor_commit_sha
+      }
+      function get_changed_files_by_status() {
+        # First argument:
+        # Select only files that are Added (A), Copied (C), Deleted (D), Modified (M), Renamed (R), have their type (i.e. regular file, symlink, submodule, …​) changed (T), are Unmerged (U), are Unknown (X), or have had their pairing Broken (B).
+        set -x
+        if [[ -z "$COMPARISON_BRANCH" ]]; then exit 0; fi;
+        ancestor_commit_sha=$( get_ancestor_commit_sha )
+        files_changed=$( git diff --name-status --diff-filter="$1" $ancestor_commit_sha $CI_COMMIT_SHA )
+        set +x
+        echo "$files_changed" | awk '{print $NF}'
+      }
+      function init_bot() {
+        git config --global user.email "$GIT_AUTHOR_EMAIL"
+        git config --global user.name "$GIT_AUTHOR_NAME"
+      }
+      function bot_push() {
+        git push origin HEAD:$CI_COMMIT_REF_NAME
+        echo "Changes pushed! Restarting pipeline: exiting with code 123 ..."
+        exit 123
+      }
+      function bot_commit_and_push() {
+        setup_remote
+        init_bot
+        if git commit -am "$1"; then bot_push; else exit 0; fi
+      }

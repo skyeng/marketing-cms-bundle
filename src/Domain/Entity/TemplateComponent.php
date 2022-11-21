@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Skyeng\MarketingCmsBundle\Domain\Entity;
 
-use Skyeng\MarketingCmsBundle\Domain\Entity\ValueObject\PageComponentName;
+use Skyeng\MarketingCmsBundle\Domain\Entity\ValueObject\ComponentName;
 use Skyeng\MarketingCmsBundle\Domain\Entity\ValueObject\Id;
 
 class TemplateComponent extends AbstractComponent
@@ -12,37 +12,16 @@ class TemplateComponent extends AbstractComponent
     use PublishedTrait;
 
     /**
-     * @var Id
+     * @param mixed[] $data
      */
-    private $id;
-
-    /**
-     * @var Template
-     */
-    private $template;
-
-    /**
-     * @var PageComponentName
-     */
-    private $name;
-
-    /**
-     * @var array
-     */
-    private $data;
-
-    /**
-     * @var int
-     */
-    private $order;
-
-    public function __construct(Id $id, ?Template $template, PageComponentName $name, array $data, int $order)
-    {
-        $this->id = $id;
-        $this->template = $template;
-        $this->name = $name;
-        $this->data = $data;
-        $this->order = $order;
+    public function __construct(
+        private Id $id,
+        private Template $template,
+        private ComponentName $name,
+        /** @var mixed[] */
+        private array $data,
+        private int $order
+    ) {
     }
 
     public function getId(): Id
@@ -60,21 +39,27 @@ class TemplateComponent extends AbstractComponent
         $this->template = $template;
     }
 
-    public function getName(): PageComponentName
+    public function getName(): ComponentName
     {
         return $this->name;
     }
 
-    public function setName(PageComponentName $name): void
+    public function setName(ComponentName $name): void
     {
         $this->name = $name;
     }
 
+    /**
+     * @return mixed[]
+     */
     public function getData(): array
     {
         return $this->data;
     }
 
+    /**
+     * @param mixed[] $data
+     */
     public function setData(array $data): void
     {
         $this->data = $data;
@@ -85,7 +70,7 @@ class TemplateComponent extends AbstractComponent
         return $this->order;
     }
 
-    public function setOrder(?int $order): void
+    public function setOrder(int $order): void
     {
         $this->order = $order;
     }

@@ -5,26 +5,17 @@ declare(strict_types=1);
 namespace Skyeng\MarketingCmsBundle\Domain\Entity;
 
 use Skyeng\MarketingCmsBundle\Domain\Entity\ValueObject\Id;
+use Stringable;
 
-class MediaCatalog
+class MediaCatalog implements Stringable
 {
-    /**
-     * @var Id
-     */
-    private $id;
-
-    /**
-     * @var string
-     */
-    private $name;
-
-    public function __construct(Id $id, string $name)
-    {
-        $this->id = $id;
-        $this->name = $name;
+    public function __construct(
+        private Id $id,
+        private string $name
+    ) {
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->name;
     }

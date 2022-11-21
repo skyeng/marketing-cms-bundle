@@ -9,6 +9,7 @@ use Skyeng\MarketingCmsBundle\Domain\Traits\ValueObjectTrait;
 
 class ContentType
 {
+    use ValueObjectTrait;
     public const TEXT_TYPE = 'text/plain';
     public const JSON_TYPE = 'application/json';
     public const HTML_TYPE = 'text/html';
@@ -21,11 +22,9 @@ class ContentType
         self::JSON_TYPE => self::JSON_TYPE,
     ];
 
-    use ValueObjectTrait;
-
     protected function checkValue(string $value): void
     {
-        if (!in_array($value, self::AVAILABLE_TYPES)) {
+        if (!in_array($value, self::AVAILABLE_TYPES, true)) {
             throw new IncorrectValueObjectException('This content type is not supported');
         }
     }

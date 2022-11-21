@@ -4,41 +4,35 @@ declare(strict_types=1);
 
 namespace Skyeng\MarketingCmsBundle\UI\Controller\Api\Cms\Redirect;
 
+use Nelmio\ApiDocBundle\Annotation\Model;
+use OpenApi\Annotations as OA;
 use Skyeng\MarketingCmsBundle\Application\Cms\Redirect\RedirectService;
 use Skyeng\MarketingCmsBundle\Application\Exception\ValidationException;
+use Skyeng\MarketingCmsBundle\Infrastructure\Symfony\Response\ResponseFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Skyeng\MarketingCmsBundle\UI\Service\Response\ResponseFactory;
 use Symfony\Component\Routing\Annotation\Route;
-use Nelmio\ApiDocBundle\Annotation\Model;
-use Swagger\Annotations as SWG;
 
 class GetRedirectsV1Controller extends AbstractController
 {
-    /**
-     * @var RedirectService
-     */
-    private $redirectService;
-
-    public function __construct(RedirectService $redirectService)
+    public function __construct(private RedirectService $redirectService)
     {
-        $this->redirectService = $redirectService;
     }
 
     /**
-     * Получить все редиректы
+     * Получить все редиректы.
      *
-     * @SWG\Tag(name="Marketing CMS"),
-     * @SWG\Response(
+     * @OA\Tag(name="Marketing CMS"),
+     * @OA\Response(
      *     response=200,
      *     description="OK",
-     *     @SWG\Schema(
+     *     @OA\Schema(
      *         type="object",
      *         allOf={
-     *             @SWG\Schema(ref="#/definitions/MarketingCmsJsonResponseOk"),
-     *             @SWG\Schema(
-     *                 @SWG\Property(
+     *             @OA\Schema(ref="#/components/schemas/MarketingCmsJsonResponseOk"),
+     *             @OA\Schema(
+     *                 @OA\Property(
      *                     property="data",
      *                     ref=@Model(type=\Skyeng\MarketingCmsBundle\Application\Cms\Redirect\Dto\GetRedirectsV1ResultDto::class)
      *                 )
@@ -46,18 +40,16 @@ class GetRedirectsV1Controller extends AbstractController
      *         }
      *     )
      * ),
-     * @SWG\Response(response=400, description="Bad Request", @SWG\Schema(ref="#/definitions/MarketingCmsJsonResponseError")),
-     * @SWG\Response(response=500, description="Internal Server Error", @SWG\Schema(ref="#/definitions/MarketingCmsJsonResponseException")),
+     * @OA\Response(response=400, description="Bad Request", @OA\Schema(ref="#/components/schemas/MarketingCmsJsonResponseError")),
+     * @OA\Response(response=500, description="Internal Server Error", @OA\Schema(ref="#/components/schemas/MarketingCmsJsonResponseException")),
      *
-     * @Route("/api/v1/cms/get-redirects", methods={"GET"})
-     *
-     * @param Request $request
-     * @return Response
      * @throws ValidationException
      */
-    public function __invoke(Request $request): Response
+    #[Route(path: '/api/v1/cms/get-redirects', methods: ['GET'])]
+    public function __invoke(): Response
     {
         $result = $this->redirectService->getRedirects();
-        return ResponseFactory::createOkResponse($request, $result);
+
+        return ResponseFactory::createOkResponse($result);
     }
 }
