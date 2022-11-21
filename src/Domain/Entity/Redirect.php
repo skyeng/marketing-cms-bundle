@@ -4,41 +4,19 @@ declare(strict_types=1);
 
 namespace Skyeng\MarketingCmsBundle\Domain\Entity;
 
+use DateTimeInterface;
 use Skyeng\MarketingCmsBundle\Domain\Entity\Resource as ResourceEntity;
 use Skyeng\MarketingCmsBundle\Domain\Entity\ValueObject\Id;
 
 class Redirect
 {
-    /**
-     * @var Id
-     */
-    private $id;
-
-    /**
-     * @var ResourceEntity
-     */
-    private $resource;
-
-    /**
-     * @var string
-     */
-    private $targetUrl;
-
-    /**
-     * @var int
-     */
-    private $httpCode;
-
     public function __construct(
-        Id $id,
-        ResourceEntity $resource,
-        string $targetUrl,
-        int $httpCode
+        private Id $id,
+        private ResourceEntity $resource,
+        private string $targetUrl,
+        private int $httpCode,
+        private DateTimeInterface $createdAt
     ) {
-        $this->id = $id;
-        $this->resource = $resource;
-        $this->targetUrl = $targetUrl;
-        $this->httpCode = $httpCode;
     }
 
     public function getId(): Id
@@ -74,5 +52,10 @@ class Redirect
     public function setHttpCode(int $httpCode): void
     {
         $this->httpCode = $httpCode;
+    }
+
+    public function getCreatedAt(): DateTimeInterface
+    {
+        return $this->createdAt;
     }
 }

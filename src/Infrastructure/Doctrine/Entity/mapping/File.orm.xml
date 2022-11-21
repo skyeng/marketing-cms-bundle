@@ -11,9 +11,10 @@
                 <cascade-persist/>
             </cascade>
         </one-to-one>
-        <field name="contentType" type="cms_content_type"/>
+        <field name="contentType" type="cms_content_type" column="content_type"/>
         <field name="content" type="text"/>
-        <field name="cacheTime" type="cms_cache_time"/>
+        <field name="cacheTime" type="cms_cache_time" column="cache_time"/>
+        <field name="createdAt" type="datetime" column="created_at"/>
     </entity>
 
 </doctrine-mapping>

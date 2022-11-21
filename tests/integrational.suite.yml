@@ -3,8 +3,9 @@ modules:
   enabled:
     - \Skyeng\MarketingCmsBundle\Tests\Helper\Integrational
     - Symfony:
-        app_path: '../src'
-        var_path: '../var'
+        app_path: 'utils/symfony-application/src'
+        kernel_class: 'Skyeng\MarketingCmsBundle\Utils\SymfonyApplication\Kernel'
+        var_path: 'utils/symfony-application/var'
         environment: 'test'
     - Doctrine2:
         depends: Symfony

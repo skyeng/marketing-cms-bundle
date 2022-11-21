@@ -10,7 +10,7 @@ use Skyeng\MarketingCmsBundle\Application\Cms\Redirect\Dto\GetRedirectsV1ResultI
 class GetRedirectsV1ResultAssembler implements GetRedirectsV1ResultAssemblerInterface
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function assemble(array $redirects): GetRedirectsV1ResultDto
     {
