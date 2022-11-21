@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace Skyeng\MarketingCmsBundle\Tests\Helper;
 
-use Codeception\Module;
 use Exception;
-use Ramsey\Uuid\Uuid;
 use Skyeng\MarketingCmsBundle\Domain\Entity\ValueObject\Id;
+use Ramsey\Uuid\Uuid;
 
-class Integrational extends Module
+class Integrational extends \Codeception\Module
 {
     use ContainerTrait;
 
     /**
+     * @return Id
      * @throws Exception
      */
     public function generateId(): Id

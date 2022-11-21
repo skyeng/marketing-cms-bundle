@@ -2,26 +2,24 @@ services:
   _defaults:
     autowire: true
     autoconfigure: true
-    bind:
-      $editorDefinition: '%marketing_cms.editor_definition%'
 
   Skyeng\MarketingCmsBundle\:
     resource: '../../*'
     exclude:
       - '../../tests'
-      - '../../**/{Dto,ValueObject,Entity,Exception}/*.php'
+      - '../../**/{Dto,ValueObject,Model,Entity,Exception}/*.php'
       - '../../Domain/{Exception,Traits,Entity,Event}'
       - '../../Domain/{Exception,Traits,Entity,Event}/*.php'
       - '../../Domain/{Exception,Traits,Entity,Event}/**/*.php'
 
-  Skyeng\MarketingCmsBundle\Application\Cms\Model\Assembler\LocalizedModelAsArrayAssembler:
-    arguments:
-      $fieldValueGetter: '@Skyeng\MarketingCmsBundle\Application\Cms\Model\Assembler\DatetimeFieldValueGetter'
+  marketing_cms_bundle.listener.media_file_updated_listener:
+    class: Skyeng\MarketingCmsBundle\Application\EventListener\MediaFileUpdatedListener
+    tags:
+      - { name: kernel.event_listener, event: vich_uploader.pre_upload, method: onVichUploaderPreUpdate }
 
-  Skyeng\MarketingCmsBundle\Application\Cms\Model\Assembler\DatetimeFieldValueGetter:
-    arguments:
-      $next: '@Skyeng\MarketingCmsBundle\Application\Cms\Model\Assembler\ComponentFieldValueGetter'
+  Skyeng\MarketingCmsBundle\UI\Controller\Admin\PageCrudController:
+    calls:
+      - setPageFrontendUrlResolver: ['@?cms_bundle_page_frontend_url_resolver']
 
-  Skyeng\MarketingCmsBundle\Application\Cms\Model\Assembler\ComponentFieldValueGetter:
-    arguments:
-      $next: '@Skyeng\MarketingCmsBundle\Application\Cms\Model\Assembler\DefaultFieldValueGetter'
+  Skyeng\MarketingCmsBundle\UI\Command\MakeComponentMaker:
+    arguments: ['@maker.generator']

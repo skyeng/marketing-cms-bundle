@@ -4,26 +4,35 @@ declare(strict_types=1);
 
 namespace Skyeng\MarketingCmsBundle\Domain\Entity;
 
-use DateTimeInterface;
+use Skyeng\MarketingCmsBundle\Domain\Entity\ValueObject\Id;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Skyeng\MarketingCmsBundle\Domain\Entity\ValueObject\Id;
-use Stringable;
 
-class Template implements Stringable
+class Template
 {
     use PublishedTrait;
 
     /**
+     * @var Id
+     */
+    private $id;
+
+    /**
+     * @var string
+     */
+    private $name;
+
+    /**
      * @var Collection|TemplateComponent[]
      */
-    private Collection $components;
+    private $components;
 
     public function __construct(
-        private Id $id,
-        private string $name,
-        private DateTimeInterface $createdAt
+        Id $id,
+        string $name
     ) {
+        $this->id = $id;
+        $this->name = $name;
         $this->components = new ArrayCollection();
     }
 
@@ -47,9 +56,6 @@ class Template implements Stringable
         $this->name = $name;
     }
 
-    /**
-     * @return Collection|TemplateComponent[]
-     */
     public function getComponents(): Collection
     {
         return $this->components;
@@ -64,10 +70,5 @@ class Template implements Stringable
     public function removeComponent(TemplateComponent $component): void
     {
         $this->components->removeElement($component);
-    }
-
-    public function getCreatedAt(): DateTimeInterface
-    {
-        return $this->createdAt;
     }
 }

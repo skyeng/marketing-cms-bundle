@@ -1,3 +1,0 @@
-dashboard:
-  resource: ../src/Controller/DashboardController.php
-  type: annotation

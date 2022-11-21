@@ -4,45 +4,47 @@ declare(strict_types=1);
 
 namespace Skyeng\MarketingCmsBundle\Tests\Api\V1\Cms;
 
-use Codeception\Exception\ModuleException;
-use Codeception\Util\HttpCode;
 use Skyeng\MarketingCmsBundle\Tests\ApiTester;
-use Skyeng\MarketingCmsBundle\Tests\DataFixtures\FileFixtures;
-use Skyeng\MarketingCmsBundle\Tests\DataFixtures\RedirectFixtures;
+use Skyeng\MarketingCmsBundle\Infrastructure\Doctrine\DataFixtures\FileFixtures;
+use Skyeng\MarketingCmsBundle\Infrastructure\Doctrine\DataFixtures\RedirectFixtures;
+use Codeception\Util\HttpCode;
 
 class GetFileV1Cest
 {
-    private const URL = '/api/v1/cms/get-file';
+    /**
+     * @var string
+     */
+    private $url = '/api/v1/cms/get-file';
 
-    public function _before(ApiTester $I): void
+    public function _before(ApiTester $I)
     {
         $I->haveFixtures([FileFixtures::class, RedirectFixtures::class]);
     }
 
     /**
-     * @throws ModuleException
+     * @throws \Codeception\Exception\ModuleException
      */
     public function requestShouldReturn200ResponseCode(ApiTester $I): void
     {
-        $I->sendGET(self::URL, ['uri' => '/test.txt']);
+        $I->sendGET($this->url, ['uri' => '/test.txt']);
         $I->seeResponseCodeIs(HttpCode::OK);
     }
 
     /**
-     * @throws ModuleException
+     * @throws \Codeception\Exception\ModuleException
      */
     public function requestShouldReturn400ResponseCode(ApiTester $I): void
     {
-        $I->sendGET(self::URL, ['unexpected_param' => 'test']);
+        $I->sendGET($this->url, ['unexpected_param' => 'test']);
         $I->seeResponseCodeIs(HttpCode::BAD_REQUEST);
     }
 
     /**
-     * @throws ModuleException
+     * @throws \Codeception\Exception\ModuleException
      */
     public function requestShouldReturnResponseWithCorrectStructure(ApiTester $I): void
     {
-        $I->sendGET(self::URL, ['uri' => '/test.json']);
+        $I->sendGET($this->url, ['uri' => '/test.json']);
         $I->seeResponseIsJson();
         $I->seeResponseMatchesJsonType(
             [
@@ -55,12 +57,12 @@ class GetFileV1Cest
     }
 
     /**
-     * @throws ModuleException
+     * @throws \Codeception\Exception\ModuleException
      */
     public function requestShouldReturnRedirectIfExists(ApiTester $I): void
     {
         $I->stopFollowingRedirects();
-        $I->sendGET(self::URL, ['uri' => '/test-file-redirect.json']);
+        $I->sendGET($this->url, ['uri' => '/test-file-redirect.json']);
         $I->seeResponseCodeIs(301);
         $I->seeHttpHeader('Location', 'https://skyeng.ru');
     }

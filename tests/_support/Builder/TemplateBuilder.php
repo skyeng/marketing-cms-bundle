@@ -5,31 +5,42 @@ declare(strict_types=1);
 namespace Skyeng\MarketingCmsBundle\Tests\Builder;
 
 use DateTimeImmutable;
-use DateTimeInterface;
 use Ramsey\Uuid\Uuid;
+use Skyeng\MarketingCmsBundle\Domain\Entity\Page;
+use Skyeng\MarketingCmsBundle\Domain\Entity\PageComponent;
+use Skyeng\MarketingCmsBundle\Domain\Entity\Resource;
 use Skyeng\MarketingCmsBundle\Domain\Entity\Template;
 use Skyeng\MarketingCmsBundle\Domain\Entity\TemplateComponent;
 use Skyeng\MarketingCmsBundle\Domain\Entity\ValueObject\Id;
 
 class TemplateBuilder
 {
-    private Id $id;
+    /**
+     * @var Id
+     */
+    private $id;
 
-    private const NAME = 'template';
+    /**
+     * @var string
+     */
+    private $name;
 
-    private const PUBLISHED = true;
+    /**
+     * @var bool
+     */
+    private $published;
 
     /**
      * @var TemplateComponent[]
      */
-    private array $components = [];
-
-    private DateTimeInterface $createdAt;
+    private $components;
 
     public function __construct()
     {
         $this->id = new Id(Uuid::uuid4()->toString());
-        $this->createdAt = new DateTimeImmutable('now');
+        $this->name = 'template';
+        $this->published = true;
+        $this->components = [];
     }
 
     public static function template(): self
@@ -41,11 +52,10 @@ class TemplateBuilder
     {
         $template = new Template(
             $this->id,
-            self::NAME,
-            $this->createdAt,
+            $this->name
         );
 
-        $template->setIsPublished(self::PUBLISHED);
+        $template->setIsPublished($this->published);
 
         foreach ($this->components as $component) {
             $template->addComponent($component);
@@ -54,9 +64,6 @@ class TemplateBuilder
         return $template;
     }
 
-    /**
-     * @param TemplateComponent[] $components
-     */
     public function withComponents(array $components): self
     {
         $this->components = $components;

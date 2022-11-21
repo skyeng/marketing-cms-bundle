@@ -9,14 +9,21 @@ use Throwable;
 
 class FileRedirectException extends ApplicationException
 {
-    public function __construct(
-        private string $targetUrl,
-        private int $httpCode,
-        string $message = '',
-        int $code = 0,
-        Throwable $previous = null
-    ) {
+    /**
+     * @var string
+     */
+    private $targetUrl;
+
+    /**
+     * @var int
+     */
+    private $httpCode;
+
+    public function __construct(string $targetUrl, int $httpCode, $message = "", $code = 0, Throwable $previous = null)
+    {
         parent::__construct($message, $code, $previous);
+        $this->targetUrl = $targetUrl;
+        $this->httpCode = $httpCode;
     }
 
     public function getTargetUrl(): string

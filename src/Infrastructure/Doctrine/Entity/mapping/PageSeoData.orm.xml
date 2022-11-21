@@ -1,0 +1,21 @@
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="Skyeng\MarketingCmsBundle\Domain\Entity\PageSeoData" table="cms_page_seo_data"
+            repository-class="Skyeng\MarketingCmsBundle\Infrastructure\Doctrine\Repository\PageSeoDataRepository">
+        <id name="page" type="cms_id" association-key="true"/>
+        <one-to-one field="page" target-entity="Skyeng\MarketingCmsBundle\Domain\Entity\Page" inversed-by="pageSeoData">
+            <cascade>
+                <cascade-persist/>
+            </cascade>
+        </one-to-one>
+        <field name="title" nullable="true"/>
+        <field name="description" type="text" nullable="true"/>
+        <field name="keywords" type="text" nullable="true"/>
+        <field name="isNoIndex" type="boolean"/>
+        <field name="isNoFollow" type="boolean"/>
+    </entity>
+
+</doctrine-mapping>

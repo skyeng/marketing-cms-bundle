@@ -15,27 +15,7 @@ interface MediaFileRepositoryInterface
 
     /**
      * @return MediaFile[]
-     *
      * @throws MediaFileRepositoryException
      */
     public function getByCatalog(MediaCatalog $catalog): array;
-
-    /**
-     * @throws MediaFileRepositoryException
-     */
-    public function remove(MediaFile ...$mediaFiles): void;
-
-    /**
-     * @param string[] $ids
-     *
-     * @return MediaFile[]
-     *
-     * @throws MediaFileRepositoryException
-     */
-    public function getByIds(array $ids): array;
-
-    /**
-     * @throws MediaFileRepositoryException
-     */
-    public function save(MediaFile ...$mediaFiles): void;
 }

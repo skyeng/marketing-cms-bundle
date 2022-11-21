@@ -6,11 +6,24 @@ namespace Skyeng\MarketingCmsBundle\Domain\Entity;
 
 trait PublishedTrait
 {
-    private bool $isPublished = false;
+    /**
+     * @var bool
+     */
+    private $isPublished = false;
 
     public function isPublished(): bool
     {
         return $this->isPublished;
+    }
+
+    public function publish(): void
+    {
+        $this->isPublished = true;
+    }
+
+    public function unpublish(): void
+    {
+        $this->isPublished = false;
     }
 
     public function setIsPublished(bool $isPublished): void

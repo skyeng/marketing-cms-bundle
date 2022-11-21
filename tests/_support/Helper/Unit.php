@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Skyeng\MarketingCmsBundle\Tests\Helper;
 
-use Codeception\Module;
-
-class Unit extends Module
+class Unit extends \Codeception\Module
 {
 }

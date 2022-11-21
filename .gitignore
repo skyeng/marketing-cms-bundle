@@ -1,11 +1,3 @@
 /.idea/
-/utils/symfony-application/public/bundles/
-/utils/symfony-application/var/*
-!/utils/symfony-application/var/log/
-/utils/symfony-application/var/log/*
-!/utils/symfony-application/var/log/.gitkeep
-!/utils/symfony-application/var/cache/
-/utils/symfony-application/var/cache/*
-!/utils/symfony-application/var/cache/.gitkeep
-/utils/php-cs-fixer/.php-cs-fixer.cache
 /vendor/
+composer.lock

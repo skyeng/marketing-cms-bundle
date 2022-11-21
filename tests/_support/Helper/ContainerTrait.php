@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Skyeng\MarketingCmsBundle\Tests\Helper;
 
 use Codeception\Exception\ModuleException;
-use Codeception\Module\Symfony;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
 trait ContainerTrait
 {
     /**
+     * @return ContainerInterface
      * @throws ModuleException
      */
     public function getServiceContainer(): ContainerInterface
@@ -20,11 +20,12 @@ trait ContainerTrait
     }
 
     /**
-     * @throws ModuleException
+     * @return \Symfony\Component\DependencyInjection\ContainerInterface
+     * @throws \Codeception\Exception\ModuleException
      */
     public function getAppContainer(): ContainerInterface
     {
-        /** @var Symfony $module */
+        /** @var \Codeception\Module\Symfony $module */
         $module = $this->getModule('Symfony');
 
         return $module->kernel->getContainer();
@@ -33,12 +34,10 @@ trait ContainerTrait
     public function getService(string $service)
     {
         $container = $this->getServiceContainer();
-
         try {
             return $container->get($service);
-        } catch (ServiceNotFoundException) {
+        } catch (ServiceNotFoundException $e) {
             $container = $this->getAppContainer();
-
             return $container->get($service);
         }
     }
