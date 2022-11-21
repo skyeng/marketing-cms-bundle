@@ -11,6 +11,7 @@ interface GetRedirectsV1ResultAssemblerInterface
 {
     /**
      * @param Redirect[] $redirects
+     * @return GetRedirectsV1ResultDto
      */
     public function assemble(array $redirects): GetRedirectsV1ResultDto;
 }

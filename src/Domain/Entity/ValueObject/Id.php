@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace Skyeng\MarketingCmsBundle\Domain\Entity\ValueObject;
 
 use Skyeng\MarketingCmsBundle\Domain\Traits\Exception\IncorrectValueObjectException;
-use Stringable;
 
-class Id implements Stringable
+class Id
 {
-    protected string $value;
+    /**
+     * @var string
+     */
+    protected $value;
 
     public function __construct(string $value)
     {
@@ -25,9 +27,9 @@ class Id implements Stringable
         return $this->value;
     }
 
-    public function isEqual(self $id): bool
+    public function isEqual(Id $id): bool
     {
-        return $this->value === (string) $id;
+        return $this->value === (string)$id;
     }
 
     public function getValue(): string

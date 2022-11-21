@@ -6,20 +6,25 @@ namespace Skyeng\MarketingCmsBundle\UI\Controller\Admin;
 
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use Skyeng\MarketingCmsBundle\Domain\Entity\Template;
+use Skyeng\MarketingCmsBundle\Domain\Repository\TemplateRepository\TemplateRepositoryInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
-use Skyeng\MarketingCmsBundle\Domain\Entity\Template;
-use Skyeng\MarketingCmsBundle\Domain\Factory\Template\TemplateFactoryInterface;
-use Skyeng\MarketingCmsBundle\Domain\Service\UrlService\TemplateCmsEditorFrontendUrlResolverInterface;
+use Skyeng\MarketingCmsBundle\Infrastructure\Symfony\Form\TemplateComponentType;
 
 class TemplateCrudController extends AbstractCrudController
 {
+    /**
+     * @var TemplateRepositoryInterface
+     */
+    private $templateRepository;
+
     public function __construct(
-        private TemplateCmsEditorFrontendUrlResolverInterface $cmsEditorFrontendUrlResolver,
-        private TemplateFactoryInterface $templateFactory,
+        TemplateRepositoryInterface $templateRepository
     ) {
+        $this->templateRepository = $templateRepository;
     }
 
     public static function getEntityFqcn(): string
@@ -30,66 +35,65 @@ class TemplateCrudController extends AbstractCrudController
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
-            ->showEntityActionsInlined()
             ->setPageTitle(Crud::PAGE_INDEX, 'Готовые компоненты')
             ->setPageTitle(Crud::PAGE_DETAIL, 'Готовый компонент')
             ->setPageTitle(Crud::PAGE_NEW, 'Создать готовый компонент')
             ->setPageTitle(Crud::PAGE_EDIT, 'Готовый компонент')
-            ->setDefaultSort(['createdAt' => 'DESC'])
             ->setPaginatorUseOutputWalkers(true);
     }
 
-    /**
-     * @return TextField[]|DateTimeField[]
-     */
     public function configureFields(string $pageName): iterable
     {
+        $name = TextField::new('name', 'Название');
+
+        $components = CollectionField::new('components', 'Компоненты')
+            ->allowAdd()
+            ->allowDelete()
+            ->setEntryType(TemplateComponentType::class)
+            ->setFormTypeOptions([
+                'label' => false,
+            ])
+            ->addCssClass('expanded-collection')
+            ->addCssClass('positionable-collection')
+            ->addCssFiles('bundles/marketingcms/expanded-collection-style.css')
+            ->addJsFiles('bundles/marketingcms/positionable-collection.js')
+            ->addJsFiles('bundles/marketingcms/dynamic-page-components.js');
+
         if (in_array($pageName, [Crud::PAGE_INDEX, Crud::PAGE_DETAIL], true)) {
-            return [
-                TextField::new('name', 'Название'),
-                DateTimeField::new('createdAt', 'Дата создания'),
-            ];
+            return [$name];
         }
 
         return [
-            TextField::new('name', 'Название'),
+            $name,
+            $components,
         ];
     }
 
     public function createEntity(string $entityFqcn): Template
     {
-        return $this->templateFactory->create('');
+        return new Template(
+            $this->templateRepository->getNextIdentity(),
+            ''
+        );
     }
 
     public function configureActions(Actions $actions): Actions
     {
-        $actions
-            ->add(
-                Crud::PAGE_INDEX,
-                Action::new('cloneTemplate', false, 'fa fa-clone')
-                    ->linkToRoute(
-                        'clone_template',
-                        static fn (Template $template): array => [
+        $actions->add(
+            Crud::PAGE_INDEX,
+            Action::new('cloneTemplate', false, 'fa fa-clone')
+                ->linkToRoute(
+                    'clone_template',
+                    static function (Template $template) {
+                        return [
                             'id' => $template->getId()->getValue(),
-                        ]
-                    )
-                    ->setHtmlAttributes([
-                        'onclick' => 'return confirm("Вы действительно хотите склонировать этот готовый компонент?")',
-                    ])
-            )
-            ->remove(Crud::PAGE_INDEX, Action::BATCH_DELETE)
-            ->update(Crud::PAGE_INDEX, Action::DELETE, static fn (Action $action): Action => $action->setIcon('fa fa-trash')->setLabel(''));
-
-        if ($this->cmsEditorFrontendUrlResolver->showEditorLink()) {
-            $actions->add(
-                Crud::PAGE_INDEX,
-                Action::new('cmsEditor', 'CMS Editor')
-                    ->linkToUrl(
-                        fn (Template $template): string => $this->cmsEditorFrontendUrlResolver->createUrl($template->getId())
-                    )
-                    ->setHtmlAttributes(['target' => '_blank'])
-            );
-        }
+                        ];
+                    }
+                )
+                ->setHtmlAttributes([
+                    'onclick' => 'return confirm("Вы действительно хотите склонировать этот готовый компонент?")',
+                ])
+        );
 
         return parent::configureActions($actions);
     }

@@ -24,82 +24,15 @@ class MediaFileRepository extends ServiceEntityRepository implements MediaFileRe
     public function getNextIdentity(): Id
     {
         $uuid = Uuid::uuid4();
-
         return new Id($uuid->toString());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getByCatalog(MediaCatalog $catalog): array
     {
         try {
-            /** @var MediaFile[] $mediaFiles */
-            $mediaFiles = $this->findBy(['catalog' => $catalog]);
+            return $this->findBy(['catalog' => $catalog]);
         } catch (Exception $e) {
             throw new MediaFileRepositoryException($e->getMessage(), $e->getCode(), $e);
         }
-
-        return $mediaFiles;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function save(MediaFile ...$mediaFiles): void
-    {
-        $em = $this->getEntityManager();
-
-        try {
-            $em->beginTransaction();
-
-            foreach ($mediaFiles as $mediaFile) {
-                $em->persist($mediaFile);
-            }
-
-            $em->flush();
-
-            $em->commit();
-        } catch (\Exception $e) {
-            $em->rollback();
-            throw new MediaFileRepositoryException($e->getMessage(), $e->getCode(), $e);
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function remove(MediaFile ...$mediaFiles): void
-    {
-        $em = $this->getEntityManager();
-
-        try {
-            $em->beginTransaction();
-
-            foreach ($mediaFiles as $mediaFile) {
-                $em->remove($mediaFile);
-            }
-            $em->flush();
-
-            $em->commit();
-        } catch (\Exception $e) {
-            $em->rollback();
-            throw new MediaFileRepositoryException($e->getMessage(), $e->getCode(), $e);
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getByIds(array $ids): array
-    {
-        try {
-            /** @var MediaFile[] $mediaFiles */
-            $mediaFiles = $this->findBy(['id' => $ids]);
-        } catch (Exception $e) {
-            throw new MediaFileRepositoryException($e->getMessage(), $e->getCode(), $e);
-        }
-
-        return $mediaFiles;
     }
 }

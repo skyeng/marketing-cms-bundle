@@ -16,8 +16,7 @@
         <field name="name" unique="true"/>
         <field name="type" type="cms_media_file_type"/>
         <field name="storage" type="cms_media_file_storage"/>
-        <field name="originalName" column="original_name"/>
-        <field name="createdAt" type="datetime" column="created_at"/>
+        <field name="originalName"/>
     </entity>
 
 </doctrine-mapping>

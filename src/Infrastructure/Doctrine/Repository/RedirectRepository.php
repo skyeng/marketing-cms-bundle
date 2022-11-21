@@ -4,27 +4,25 @@ declare(strict_types=1);
 
 namespace Skyeng\MarketingCmsBundle\Infrastructure\Doctrine\Repository;
 
+use Skyeng\MarketingCmsBundle\Domain\Entity\Redirect;
+use Skyeng\MarketingCmsBundle\Domain\Entity\ValueObject\Uri;
+use Skyeng\MarketingCmsBundle\Domain\Repository\RedirectRepository\Exception\RedirectNotFoundException;
+use Skyeng\MarketingCmsBundle\Domain\Repository\RedirectRepository\Exception\RedirectRepositoryException;
+use Skyeng\MarketingCmsBundle\Domain\Repository\RedirectRepository\RedirectRepositoryInterface;
+use Skyeng\MarketingCmsBundle\Domain\Entity\ValueObject\Id;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LoggerInterface;
 use Ramsey\Uuid\Uuid;
-use Skyeng\MarketingCmsBundle\Domain\Entity\Redirect;
-use Skyeng\MarketingCmsBundle\Domain\Entity\ValueObject\Id;
-use Skyeng\MarketingCmsBundle\Domain\Entity\ValueObject\Uri;
-use Skyeng\MarketingCmsBundle\Domain\Repository\RedirectRepository\Exception\RedirectNotFoundException;
-use Skyeng\MarketingCmsBundle\Domain\Repository\RedirectRepository\Exception\RedirectRepositoryException;
-use Skyeng\MarketingCmsBundle\Domain\Repository\RedirectRepository\RedirectRepositoryInterface;
 
 class RedirectRepository extends ServiceEntityRepository implements RedirectRepositoryInterface
 {
     use LoggerAwareTrait;
 
-    public function __construct(
-        ManagerRegistry $registry,
-        LoggerInterface $logger
-    ) {
+    public function __construct(ManagerRegistry $registry, LoggerInterface $logger)
+    {
         parent::__construct($registry, Redirect::class);
         $this->logger = $logger;
     }
@@ -32,31 +30,22 @@ class RedirectRepository extends ServiceEntityRepository implements RedirectRepo
     public function getNextIdentity(): Id
     {
         $uuid = Uuid::uuid4();
-
         return new Id($uuid->toString());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getAll(): array
     {
         try {
-            /** @var Redirect[] $redirects */
-            $redirects = $this->findBy([]);
+            return $this->findBy([]);
         } catch (Exception $e) {
             throw new RedirectRepositoryException($e->getMessage(), $e->getCode(), $e);
         }
-
-        return $redirects;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getByUri(Uri $uri): Redirect
     {
         try {
+            /** @var Redirect $redirect */
             $redirect = $this->createQueryBuilder('red')
                 ->innerJoin('red.resource', 'res')
                 ->andWhere('res.uri = :uri')
@@ -67,7 +56,7 @@ class RedirectRepository extends ServiceEntityRepository implements RedirectRepo
             throw new RedirectRepositoryException($e->getMessage(), $e->getCode(), $e);
         }
 
-        if (!$redirect instanceof Redirect) {
+        if ($redirect === null) {
             throw new RedirectNotFoundException();
         }
 
@@ -77,6 +66,6 @@ class RedirectRepository extends ServiceEntityRepository implements RedirectRepo
     public function save(Redirect $Redirect): void
     {
         $this->getEntityManager()->persist($Redirect);
-        $this->getEntityManager()->flush();
+        $this->getEntityManager()->flush($Redirect);
     }
 }

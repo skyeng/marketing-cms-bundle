@@ -14,14 +14,14 @@ use Symfony\Component\Validator\Constraints\Regex;
 
 class GetFileV1Form extends AbstractType
 {
-    public function configureOptions(OptionsResolver $resolver): void
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
             'csrf_protection' => false,
         ]);
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options): void
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('uri', TextType::class, [
             'constraints' => [new NotBlank(), new Regex(['pattern' => Uri::PATH_PATTERN])],

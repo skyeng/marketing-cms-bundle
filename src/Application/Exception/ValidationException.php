@@ -10,20 +10,16 @@ use Throwable;
 class ValidationException extends InvalidArgumentException implements ApplicationExceptionInterface
 {
     /**
-     * @param mixed[] $errors
+     * @var array
      */
-    public function __construct(
-        string $message = '',
-        int $code = 400,
-        ?Throwable $previous = null,
-        protected array $errors = []
-    ) {
+    protected $errors;
+
+    public function __construct(string $message = '', int $code = 400, ?Throwable $previous = null, array $errors = [])
+    {
+        $this->errors = $errors;
         parent::__construct($message, $code, $previous);
     }
 
-    /**
-     * @return mixed[]
-     */
     public function getErrors(): array
     {
         return $this->errors;
@@ -32,16 +28,10 @@ class ValidationException extends InvalidArgumentException implements Applicatio
     public function getErrorsAsString(): string
     {
         $result = '';
-
         foreach ($this->errors as $key => $values) {
             $result .= sprintf('[%s: %s]', $key, implode(' ', $values));
         }
 
         return $result;
-    }
-
-    public static function fromErrors(array $errors): self
-    {
-        return new self('Validation error', 400, null, $errors);
     }
 }

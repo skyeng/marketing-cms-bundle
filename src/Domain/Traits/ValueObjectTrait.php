@@ -6,7 +6,10 @@ namespace Skyeng\MarketingCmsBundle\Domain\Traits;
 
 trait ValueObjectTrait
 {
-    protected string $value;
+    /**
+     * @var string
+     */
+    protected $value;
 
     public function __construct(string $value)
     {
@@ -16,7 +19,7 @@ trait ValueObjectTrait
 
     public function __toString()
     {
-        return $this->value;
+        return (string) $this->value;
     }
 
     public function getValue(): string

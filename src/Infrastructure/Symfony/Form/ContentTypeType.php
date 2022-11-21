@@ -19,18 +19,18 @@ class ContentTypeType extends ChoiceType implements DataTransformerInterface
         $builder->addViewTransformer($this);
     }
 
-    public function transform(mixed $value): string
+    public function transform($choice): string
     {
-        return (string) $value;
+        return (string)$choice;
     }
 
-    public function reverseTransform(mixed $value): ContentType
+    public function reverseTransform($value): ContentType
     {
         if (!is_string($value)) {
             throw new TransformationFailedException('Expected a string.');
         }
 
-        if (!in_array($value, ContentType::AVAILABLE_TYPES, true)) {
+        if (!in_array($value, ContentType::AVAILABLE_TYPES)) {
             throw new TransformationFailedException(sprintf('The choice "%s" does not exist.', $value));
         }
 

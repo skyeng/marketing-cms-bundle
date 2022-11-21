@@ -8,7 +8,8 @@ use Skyeng\MarketingCmsBundle\Domain\Traits\ValueObjectTrait;
 
 class CacheTime
 {
-    use ValueObjectTrait;
     public const CACHE_TIME_1H = '3600';
     public const CACHE_TIME_30M = '1800';
+
+    use ValueObjectTrait;
 }

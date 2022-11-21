@@ -12,7 +12,7 @@ class VichFileField implements FieldInterface
 {
     use FieldTrait;
 
-    public static function new(string $propertyName, ?string $label = null): self
+    public static function new(string $propertyName, ?string $label = null)
     {
         return (new self())
             ->setProperty($propertyName)

@@ -8,4 +8,5 @@ use DomainException as BaseDomainException;
 
 abstract class DomainException extends BaseDomainException implements DomainExceptionInterface
 {
+
 }

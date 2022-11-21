@@ -9,8 +9,9 @@ use Skyeng\MarketingCmsBundle\Domain\Traits\ValueObjectTrait;
 
 class Uri
 {
-    use ValueObjectTrait;
     public const PATH_PATTERN = '~^/.{1,}$~';
+
+    use ValueObjectTrait;
 
     protected function checkValue(string $value): void
     {

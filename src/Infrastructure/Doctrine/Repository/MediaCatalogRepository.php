@@ -24,66 +24,32 @@ class MediaCatalogRepository extends ServiceEntityRepository implements MediaCat
     public function getNextIdentity(): Id
     {
         $uuid = Uuid::uuid4();
-
         return new Id($uuid->toString());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getAll(): array
     {
         try {
-            /** @var MediaCatalog[] $mediaCatalogs */
-            $mediaCatalogs = $this->findAll();
+            return $this->findAll();
         } catch (Exception $e) {
             throw new MediaCatalogRepositoryException($e->getMessage(), $e->getCode(), $e);
         }
-
-        return $mediaCatalogs;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getFirst(): MediaCatalog
     {
         try {
-            $mediaCatalog = $this->findOneBy([], ['id' => 'desc']);
+            $catalog = $this->findOneBy([], ['id' => 'desc']);
+
+            if ($catalog === null) {
+                throw new MediaCatalogNotFoundException();
+            }
+
+            return $catalog;
+        } catch (MediaCatalogNotFoundException $e) {
+            throw $e;
         } catch (Exception $e) {
             throw new MediaCatalogRepositoryException($e->getMessage(), $e->getCode(), $e);
         }
-
-        if (!$mediaCatalog instanceof MediaCatalog) {
-            throw new MediaCatalogNotFoundException();
-        }
-
-        return $mediaCatalog;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getByName(string $name): MediaCatalog
-    {
-        try {
-            $mediaCatalog = $this->findOneBy(['name' => $name]);
-        } catch (Exception $e) {
-            throw new MediaCatalogRepositoryException($e->getMessage(), $e->getCode(), $e);
-        }
-
-        if (!$mediaCatalog instanceof MediaCatalog) {
-            throw new MediaCatalogNotFoundException();
-        }
-
-        return $mediaCatalog;
-    }
-
-    public function save(MediaCatalog $mediaCatalog): void
-    {
-        $em = $this->getEntityManager();
-
-        $em->persist($mediaCatalog);
-        $em->flush();
     }
 }

@@ -8,4 +8,5 @@ use Skyeng\MarketingCmsBundle\Domain\Exception\DomainException;
 
 class IncorrectValueObjectException extends DomainException
 {
+
 }

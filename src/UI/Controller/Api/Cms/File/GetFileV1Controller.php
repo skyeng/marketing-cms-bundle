@@ -4,50 +4,73 @@ declare(strict_types=1);
 
 namespace Skyeng\MarketingCmsBundle\UI\Controller\Api\Cms\File;
 
-use OpenApi\Annotations as OA;
-use Skyeng\MarketingCmsBundle\Application\Cms\File\Dto\GetFileV1RequestDto;
 use Skyeng\MarketingCmsBundle\Application\Cms\File\Exception\FileRedirectException;
 use Skyeng\MarketingCmsBundle\Application\Cms\File\FileService;
-use Skyeng\MarketingCmsBundle\Application\Exception\ValidationException;
-use Skyeng\MarketingCmsBundle\Application\Service\Validator\ValidatorInterface;
+use Skyeng\MarketingCmsBundle\Application\Cms\File\Dto\GetFileV1RequestDto;
+use Skyeng\MarketingCmsBundle\Application\Cms\Redirect\RedirectService;
 use Skyeng\MarketingCmsBundle\Domain\Repository\FileRepository\Exception\FileNotFoundException;
-use Skyeng\MarketingCmsBundle\Infrastructure\Symfony\Response\ResponseFactory;
 use Skyeng\MarketingCmsBundle\UI\Controller\Api\Cms\File\Validation\GetFileV1Form;
+use Skyeng\MarketingCmsBundle\Application\Exception\ValidationException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Skyeng\MarketingCmsBundle\UI\Service\Validator\ValidatorInterface;
+use Skyeng\MarketingCmsBundle\UI\Service\Response\ResponseFactory;
 use Symfony\Component\Routing\Annotation\Route;
+use Swagger\Annotations as SWG;
 
 class GetFileV1Controller extends AbstractController
 {
+    /**
+     * @var RedirectService
+     */
+    private $redirectService;
+
+    /**
+     * @var FileService
+     */
+    private $fileService;
+
+    /**
+     * @var ValidatorInterface
+     */
+    private $validator;
+
     public function __construct(
-        private FileService $fileService,
-        private ValidatorInterface $validator
+        RedirectService $redirectService,
+        FileService $fileService,
+        ValidatorInterface $validator
     ) {
+        $this->redirectService = $redirectService;
+        $this->fileService = $fileService;
+        $this->validator = $validator;
     }
 
     /**
-     * Cms File.
+     * Cms File
      *
-     * @OA\Tag(name="Marketing CMS"),
-     * @OA\Parameter(
+     * @SWG\Tag(name="Marketing CMS"),
+     * @SWG\Parameter(
      *     name="uri",
      *     in="query",
      *     required=true,
-     *     @OA\Schema(type="string"),
+     *     type="string",
      *     description="Uri путь (например /file.txt)",
      * ),
-     * @OA\Response(
+     * @SWG\Response(
      *     response=200,
      *     description="OK (Динамический формат ответа)",
-     *     @OA\Schema(type="file"),
+     *     @SWG\Schema(type="file"),
      * ),
-     * @OA\Response(response=400, description="Bad Request", @OA\Schema(ref="#/components/schemas/MarketingCmsJsonResponseError")),
-     * @OA\Response(response=500, description="Internal Server Error", @OA\Schema(ref="#/components/schemas/MarketingCmsJsonResponseException")),
+     * @SWG\Response(response=400, description="Bad Request", @SWG\Schema(ref="#/definitions/MarketingCmsJsonResponseError")),
+     * @SWG\Response(response=500, description="Internal Server Error", @SWG\Schema(ref="#/definitions/MarketingCmsJsonResponseException")),
      *
+     * @Route("/api/v1/cms/get-file", methods={"GET"})
+     *
+     * @param Request $request
+     * @return Response
      * @throws ValidationException
      */
-    #[Route(path: '/api/v1/cms/get-file', methods: ['GET'])]
     public function __invoke(Request $request): Response
     {
         $dto = new GetFileV1RequestDto();
@@ -55,7 +78,7 @@ class GetFileV1Controller extends AbstractController
         try {
             $this->validator->validate(GetFileV1Form::class, $request->query->all(), $dto);
         } catch (ValidationException $exception) {
-            return ResponseFactory::createErrorResponse($exception->getMessage(), $exception->getErrors());
+            return ResponseFactory::createErrorResponse($request, $exception->getMessage(), $exception->getErrors());
         }
 
         try {
@@ -68,7 +91,7 @@ class GetFileV1Controller extends AbstractController
                 $result->cacheTime,
             );
         } catch (FileNotFoundException $exception) {
-            return ResponseFactory::createErrorResponse('File resource not found', []);
+            return ResponseFactory::createErrorResponse($request, 'File resource not found', []);
         } catch (FileRedirectException $exception) {
             return ResponseFactory::createRedirectResponse($exception->getTargetUrl(), $exception->getHttpCode());
         }

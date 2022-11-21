@@ -19,12 +19,12 @@ class CacheTimeType extends ChoiceType implements DataTransformerInterface
         $builder->addViewTransformer($this);
     }
 
-    public function transform(mixed $value): string
+    public function transform($choice)
     {
-        return (string) $value;
+        return (string)$choice;
     }
 
-    public function reverseTransform(mixed $value): CacheTime
+    public function reverseTransform($value)
     {
         if (!is_string($value)) {
             throw new TransformationFailedException('Expected a string.');

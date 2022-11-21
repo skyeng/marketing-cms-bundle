@@ -4,30 +4,39 @@ declare(strict_types=1);
 
 namespace Skyeng\MarketingCmsBundle\Tests\Builder;
 
-use DateTimeImmutable;
-use DateTimeInterface;
-use Ramsey\Uuid\Uuid;
 use Skyeng\MarketingCmsBundle\Domain\Entity\Redirect;
 use Skyeng\MarketingCmsBundle\Domain\Entity\Resource as ResourceEntity;
 use Skyeng\MarketingCmsBundle\Domain\Entity\ValueObject\Id;
+use Ramsey\Uuid\Uuid;
 
 class RedirectBuilder
 {
-    private Id $id;
+    /**
+     * @var Id
+     */
+    private $id;
 
-    private ResourceEntity $resource;
+    /**
+     * @var ResourceEntity
+     */
+    private $resource;
 
-    private const TARGET_URL = 'https://skyeng.ru';
+    /**
+     * @var string
+     */
+    private $targetUrl;
 
-    private const HTTP_CODE = 301;
-
-    private DateTimeInterface $createdAt;
+    /**
+     * @var int
+     */
+    private $httpCode;
 
     private function __construct()
     {
         $this->id = new Id(Uuid::uuid4()->toString());
         $this->resource = ResourceBuilder::resource()->build();
-        $this->createdAt = new DateTimeImmutable('now');
+        $this->targetUrl = 'https://skyeng.ru';
+        $this->httpCode = 301;
     }
 
     public static function redirect(): self
@@ -40,9 +49,8 @@ class RedirectBuilder
         return new Redirect(
             $this->id,
             $this->resource,
-            self::TARGET_URL,
-            self::HTTP_CODE,
-            $this->createdAt,
+            $this->targetUrl,
+            $this->httpCode
         );
     }
 }

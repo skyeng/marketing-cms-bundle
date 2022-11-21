@@ -1,8 +1,0 @@
-security:
-    enable_authenticator_manager: true
-    providers:
-        users_in_memory: { memory: null }
-    firewalls:
-        main:
-            lazy: true
-            provider: users_in_memory

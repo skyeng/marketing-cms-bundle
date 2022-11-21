@@ -11,10 +11,10 @@
                 <cascade-persist/>
             </cascade>
         </many-to-one>
-        <field name="name" type="component_name"/>
-        <field name="data" type="json"/>
+        <field name="name" type="page_component_name"/>
+        <field name="data" type="json_array"/>
         <field name="order" column="component_order" type="integer"/>
-        <field name="isPublished" column="is_published" type="boolean"/>
+        <field name="isPublished" type="boolean"/>
     </entity>
 
 </doctrine-mapping>
