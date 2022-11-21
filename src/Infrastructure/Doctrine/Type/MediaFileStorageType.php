@@ -4,21 +4,27 @@ declare(strict_types=1);
 
 namespace Skyeng\MarketingCmsBundle\Infrastructure\Doctrine\Type;
 
-use Skyeng\MarketingCmsBundle\Domain\Entity\ValueObject\MediaFileStorage;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
+use Skyeng\MarketingCmsBundle\Domain\Entity\ValueObject\MediaFileStorage;
 
 class MediaFileStorageType extends Type
 {
+    public function convertToDatabaseValue($value, AbstractPlatform $platform): string
+    {
+        return $value->getValue();
+    }
+
     public function convertToPHPValue($value, AbstractPlatform $platform): ?MediaFileStorage
     {
         $result = parent::convertToPHPValue($value, $platform);
-        return $result === null ? null : new MediaFileStorage((string)$result);
+
+        return $result === null ? null : new MediaFileStorage((string) $result);
     }
 
-    public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform): string
+    public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
-        return $platform->getVarcharTypeDeclarationSQL($fieldDeclaration);
+        return $platform->getVarcharTypeDeclarationSQL($column);
     }
 
     public function getName(): string

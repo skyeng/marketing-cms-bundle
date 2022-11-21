@@ -4,46 +4,32 @@ declare(strict_types=1);
 
 namespace Skyeng\MarketingCmsBundle\Tests\Builder;
 
+use DateTimeImmutable;
 use Ramsey\Uuid\Uuid;
-use Skyeng\MarketingCmsBundle\Domain\Entity\PageComponent;
+use Skyeng\MarketingCmsBundle\Domain\Entity\Template;
 use Skyeng\MarketingCmsBundle\Domain\Entity\TemplateComponent;
+use Skyeng\MarketingCmsBundle\Domain\Entity\ValueObject\ComponentName;
 use Skyeng\MarketingCmsBundle\Domain\Entity\ValueObject\Id;
-use Skyeng\MarketingCmsBundle\Domain\Entity\ValueObject\PageComponentName;
 
 class TemplateComponentBuilder
 {
-    /**
-     * @var Id
-     */
-    private $id;
+    private Id $id;
 
-    /**
-     * @var PageComponentName
-     */
-    private $name;
+    private ComponentName $name;
 
-    /**
-     * @var array
-     */
-    private $data;
+    private array $data = [];
 
-    /**
-     * @var int
-     */
-    private $order;
+    private int $order = 1;
 
-    /**
-     * @var bool
-     */
-    private $published;
+    private bool $published = true;
+
+    private Template $template;
 
     public function __construct()
     {
         $this->id = new Id(Uuid::uuid4()->toString());
-        $this->name = new PageComponentName('html-component');
-        $this->data = [];
-        $this->order = 1;
-        $this->published = true;
+        $this->name = new ComponentName('html-component');
+        $this->template = new Template(new Id(Uuid::uuid4()->toString()), 'test-template', new DateTimeImmutable());
     }
 
     public static function templateComponent(): self
@@ -55,7 +41,7 @@ class TemplateComponentBuilder
     {
         $template = new TemplateComponent(
             $this->id,
-            null,
+            $this->template,
             $this->name,
             $this->data,
             $this->order
@@ -73,6 +59,16 @@ class TemplateComponentBuilder
         return $this;
     }
 
+    public function withTemplate(Template $template): self
+    {
+        $this->template = $template;
+
+        return $this;
+    }
+
+    /**
+     * @param mixed[] $data
+     */
     public function withData(array $data): self
     {
         $this->data = $data;
@@ -80,7 +76,7 @@ class TemplateComponentBuilder
         return $this;
     }
 
-    public function withName(PageComponentName $name): self
+    public function withName(ComponentName $name): self
     {
         $this->name = $name;
 

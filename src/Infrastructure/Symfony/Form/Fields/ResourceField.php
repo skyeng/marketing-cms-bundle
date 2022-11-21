@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Skyeng\MarketingCmsBundle\Infrastructure\Symfony\Form\Fields;
 
-use Skyeng\MarketingCmsBundle\Infrastructure\Symfony\Form\UriType;
 use EasyCorp\Bundle\EasyAdminBundle\Contracts\Field\FieldInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FieldTrait;
+use Skyeng\MarketingCmsBundle\Infrastructure\Symfony\Form\UriType;
 
 final class ResourceField implements FieldInterface
 {

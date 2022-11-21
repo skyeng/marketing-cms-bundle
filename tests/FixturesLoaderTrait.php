@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace Skyeng\MarketingCmsBundle\Tests;
 
-use Skyeng\MarketingCmsBundle\Infrastructure\Doctrine\DataFixtures\LoaderForAbstractFixture;
 use Codeception\Module\Symfony;
 use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
-use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\ORM\EntityManagerInterface;
+use Skyeng\MarketingCmsBundle\Tests\DataFixtures\LoaderForAbstractFixture;
 
 trait FixturesLoaderTrait
 {
@@ -21,14 +20,13 @@ trait FixturesLoaderTrait
         $entityManager = $symfonyModule->_getContainer()->get('doctrine.orm.entity_manager');
         $connection = $entityManager->getConnection();
         $fixturesLoader = new LoaderForAbstractFixture($connection);
-        $purger = new ORMPurger($entityManager);
-        $fixturesExecutor = new ORMExecutor($entityManager, $purger);
+        $fixturesExecutor = new ORMExecutor($entityManager);
 
         foreach ($fixtures as $fixture) {
             $fixtureInstance = new $fixture($connection);
             $fixturesLoader->addFixture($fixtureInstance);
         }
 
-        $fixturesExecutor->execute($fixturesLoader->getFixtures(), false);
+        $fixturesExecutor->execute($fixturesLoader->getFixtures(), true);
     }
 }

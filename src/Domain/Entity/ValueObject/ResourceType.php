@@ -9,6 +9,7 @@ use Skyeng\MarketingCmsBundle\Domain\Traits\ValueObjectTrait;
 
 class ResourceType
 {
+    use ValueObjectTrait;
     public const FILE_TYPE = 'file';
     public const REDIRECT_TYPE = 'redirect';
     public const PAGE_TYPE = 'page';
@@ -19,11 +20,9 @@ class ResourceType
         self::PAGE_TYPE => self::PAGE_TYPE,
     ];
 
-    use ValueObjectTrait;
-
     protected function checkValue(string $value): void
     {
-        if (!in_array($value, self::AVAILABLE_TYPES)) {
+        if (!in_array($value, self::AVAILABLE_TYPES, true)) {
             throw new IncorrectValueObjectException('This resource type is not supported');
         }
     }

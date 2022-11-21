@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Skyeng\MarketingCmsBundle\Domain\Entity;
 
+use DateTimeInterface;
 use Skyeng\MarketingCmsBundle\Domain\Entity\Resource as ResourceEntity;
 use Skyeng\MarketingCmsBundle\Domain\Entity\ValueObject\CacheTime;
 use Skyeng\MarketingCmsBundle\Domain\Entity\ValueObject\ContentType;
@@ -11,43 +12,14 @@ use Skyeng\MarketingCmsBundle\Domain\Entity\ValueObject\Id;
 
 class File
 {
-    /**
-     * @var Id
-     */
-    private $id;
-
-    /**
-     * @var ResourceEntity
-     */
-    private $resource;
-
-    /**
-     * @var ContentType
-     */
-    private $contentType;
-
-    /**
-     * @var string
-     */
-    private $content;
-
-    /**
-     * @var CacheTime
-     */
-    private $cacheTime;
-
     public function __construct(
-        Id $id,
-        ResourceEntity $resource,
-        ContentType $contentType,
-        string $content,
-        CacheTime $cacheTime
+        private Id $id,
+        private ResourceEntity $resource,
+        private ContentType $contentType,
+        private string $content,
+        private CacheTime $cacheTime,
+        private DateTimeInterface $createdAt
     ) {
-        $this->id = $id;
-        $this->resource = $resource;
-        $this->contentType = $contentType;
-        $this->content = $content;
-        $this->cacheTime = $cacheTime;
     }
 
     public function getId(): Id
@@ -93,5 +65,10 @@ class File
     public function setCacheTime(CacheTime $cacheTime): void
     {
         $this->cacheTime = $cacheTime;
+    }
+
+    public function getCreatedAt(): DateTimeInterface
+    {
+        return $this->createdAt;
     }
 }

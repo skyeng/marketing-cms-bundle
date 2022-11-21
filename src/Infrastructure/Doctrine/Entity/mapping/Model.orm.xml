@@ -1,0 +1,18 @@
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="Skyeng\MarketingCmsBundle\Domain\Entity\Model" table="cms_model"
+            repository-class="Skyeng\MarketingCmsBundle\Infrastructure\Doctrine\Repository\ModelRepository"
+    >
+        <id name="id" type="cms_id"/>
+        <field name="name"/>
+        <one-to-many field="fields" target-entity="Field" mapped-by="model" orphan-removal="true">
+            <cascade>
+                <cascade-persist/>
+            </cascade>
+        </one-to-many>
+    </entity>
+
+</doctrine-mapping>
