@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 return [
     [
         'id' => 'EEA7DFDB-8045-4442-AD72-D139433489AF',

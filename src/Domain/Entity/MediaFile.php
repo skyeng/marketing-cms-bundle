@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Skyeng\MarketingCmsBundle\Domain\Entity;
 
+use DateTimeInterface;
 use Skyeng\MarketingCmsBundle\Domain\Entity\ValueObject\Id;
 use Skyeng\MarketingCmsBundle\Domain\Entity\ValueObject\MediaFileStorage;
 use Skyeng\MarketingCmsBundle\Domain\Entity\ValueObject\MediaFileType;
@@ -11,62 +12,17 @@ use Symfony\Component\HttpFoundation\File\File;
 
 class MediaFile
 {
-    /**
-     * @var Id
-     */
-    private $id;
-
-    /**
-     * @var MediaCatalog
-     */
-    private $catalog;
-
-    /**
-     * @var string
-     */
-    private $title;
-
-    /**
-     * @var MediaFileType
-     */
-    private $type;
-
-    /**
-     * @var string|null
-     */
-    private $name;
-
-    /**
-     * @var MediaFileStorage
-     */
-    private $storage;
-
-    /**
-     * @var File|null
-     */
-    private $file;
-
-    /**
-     * @var string|null
-     */
-    private $originalName;
-
     public function __construct(
-        Id $id,
-        MediaCatalog $catalog,
-        string $title,
-        MediaFileType $type,
-        ?string $name,
-        MediaFileStorage $storage,
-        string $originalName
+        private Id $id,
+        private MediaCatalog $catalog,
+        private string $title,
+        private MediaFileType $type,
+        private ?string $name,
+        private MediaFileStorage $storage,
+        private ?string $originalName,
+        private DateTimeInterface $createdAt,
+        private ?File $file = null
     ) {
-        $this->id = $id;
-        $this->catalog = $catalog;
-        $this->title = $title;
-        $this->type = $type;
-        $this->name = $name;
-        $this->storage = $storage;
-        $this->originalName = $originalName;
     }
 
     public function getId(): Id
@@ -104,7 +60,7 @@ class MediaFile
         $this->type = $type;
     }
 
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -142,5 +98,10 @@ class MediaFile
     public function setOriginalName(?string $originalName): void
     {
         $this->originalName = $originalName;
+    }
+
+    public function getCreatedAt(): DateTimeInterface
+    {
+        return $this->createdAt;
     }
 }

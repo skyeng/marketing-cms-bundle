@@ -10,18 +10,12 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use Skyeng\MarketingCmsBundle\Domain\Entity\MediaCatalog;
-use Skyeng\MarketingCmsBundle\Domain\Repository\MediaCatalogRepository\MediaCatalogRepositoryInterface;
+use Skyeng\MarketingCmsBundle\Domain\Factory\MediaCatalog\MediaCatalogFactoryInterface;
 
 class MediaCatalogCrudController extends AbstractCrudController
 {
-    /**
-     * @var MediaCatalogRepositoryInterface
-     */
-    private $mediaCatalogRepository;
-
-    public function __construct(MediaCatalogRepositoryInterface $mediaCatalogRepository)
+    public function __construct(private MediaCatalogFactoryInterface $mediaCatalogFactory)
     {
-        $this->mediaCatalogRepository = $mediaCatalogRepository;
     }
 
     public static function getEntityFqcn(): string
@@ -32,34 +26,33 @@ class MediaCatalogCrudController extends AbstractCrudController
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
+            ->showEntityActionsInlined()
             ->setPageTitle(Crud::PAGE_INDEX, 'Каталог')
             ->setPageTitle(Crud::PAGE_DETAIL, 'Каталог')
             ->setPageTitle(Crud::PAGE_NEW, 'Создать каталог')
-            ->setPageTitle(Crud::PAGE_EDIT, 'Каталог');
+            ->setPageTitle(Crud::PAGE_EDIT, 'Каталог')
+            ->setDefaultSort(['name' => 'ASC']);
     }
 
     public function configureActions(Actions $actions): Actions
     {
-        $actions->remove(Crud::PAGE_INDEX, Action::DELETE);
-        return $actions;
+        return $actions
+            ->update(Crud::PAGE_INDEX, Action::DELETE, static fn (Action $action): Action => $action->setIcon('fa fa-trash')->setLabel(''))
+            ->remove(Crud::PAGE_INDEX, Action::BATCH_DELETE);
     }
 
+    /**
+     * @return TextField[]
+     */
     public function configureFields(string $pageName): iterable
     {
-        $name = TextField::new('name', 'Название');
-
-        if (in_array($pageName, [Crud::PAGE_INDEX, Crud::PAGE_DETAIL], true)) {
-            return [$name];
-        }
-
-        return [$name];
+        return [
+            TextField::new('name', 'Название'),
+        ];
     }
 
     public function createEntity(string $entityFqcn): MediaCatalog
     {
-        return new MediaCatalog(
-            $this->mediaCatalogRepository->getNextIdentity(),
-            '',
-        );
+        return $this->mediaCatalogFactory->create('');
     }
 }

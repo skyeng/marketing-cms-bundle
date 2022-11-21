@@ -11,8 +11,9 @@
                 <cascade-persist/>
             </cascade>
         </one-to-one>
-        <field name="targetUrl" type="text"/>
-        <field name="httpCode" type="integer"/>
+        <field name="targetUrl" type="text" column="target_url"/>
+        <field name="httpCode" type="integer" column="http_code"/>
+        <field name="createdAt" type="datetime" column="created_at"/>
     </entity>
 
 </doctrine-mapping>

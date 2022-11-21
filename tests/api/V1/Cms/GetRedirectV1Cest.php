@@ -4,37 +4,35 @@ declare(strict_types=1);
 
 namespace Skyeng\MarketingCmsBundle\Tests\Api\V1\Cms;
 
-use Skyeng\MarketingCmsBundle\Tests\ApiTester;
-use Skyeng\MarketingCmsBundle\Infrastructure\Doctrine\DataFixtures\RedirectFixtures;
+use Codeception\Exception\ModuleException;
 use Codeception\Util\HttpCode;
+use Skyeng\MarketingCmsBundle\Tests\ApiTester;
+use Skyeng\MarketingCmsBundle\Tests\DataFixtures\RedirectFixtures;
 
 class GetRedirectV1Cest
 {
-    /**
-     * @var string
-     */
-    private $url = '/api/v1/cms/get-redirects';
+    private const URL = '/api/v1/cms/get-redirects';
 
-    public function _before(ApiTester $I)
+    public function _before(ApiTester $I): void
     {
         $I->haveFixtures([RedirectFixtures::class]);
     }
 
     /**
-     * @throws \Codeception\Exception\ModuleException
+     * @throws ModuleException
      */
     public function requestShouldReturn200ResponseCode(ApiTester $I): void
     {
-        $I->sendGET($this->url);
+        $I->sendGET(self::URL);
         $I->seeResponseCodeIs(HttpCode::OK);
     }
 
     /**
-     * @throws \Codeception\Exception\ModuleException
+     * @throws ModuleException
      */
     public function requestShouldReturnResponseWithCorrectStructure(ApiTester $I): void
     {
-        $I->sendGET($this->url);
+        $I->sendGET(self::URL);
         $I->seeResponseMatchesJsonType(
             [
                 'data' => [
@@ -43,7 +41,7 @@ class GetRedirectV1Cest
                             'from' => 'string',
                             'to' => 'string',
                             'httpCode' => 'integer',
-                        ]
+                        ],
                     ],
                 ],
             ]

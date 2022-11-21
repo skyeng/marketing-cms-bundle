@@ -1,0 +1,10 @@
+<div class="btn-group m-2" role="group" aria-label="Basic outlined example">
+    {% for locale in action.htmlAttributes.locales %}
+        <a
+            class="btn btn-outline-primary{% if locale == action.htmlAttributes.currentLocale %} active{% endif %}"
+            href="{{ ea_url({ locale: "#{locale}" }) }}"
+        >
+            {{ locale }}
+        </a>
+    {% endfor %}
+</div>

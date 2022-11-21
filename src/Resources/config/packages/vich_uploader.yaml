@@ -1,5 +1,5 @@
 parameters:
-  env(UPLOADS_BASE_URL): '/uploads'
+    env(UPLOADS_BASE_URL): '/uploads'
 
 vich_uploader:
     mappings:

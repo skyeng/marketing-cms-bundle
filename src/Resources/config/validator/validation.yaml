@@ -15,37 +15,33 @@ Skyeng\MarketingCmsBundle\Domain\Entity\Redirect:
     resource:
       - Valid: ~
 
-# Page
+# Model Component
 
-Skyeng\MarketingCmsBundle\Domain\Entity\PageComponent:
-  constraints:
-    - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
-        fields: [page, order]
-        errorPath: order
-        message: 'Это значение уже используется для этой страницы'
+Skyeng\MarketingCmsBundle\Application\Cms\Component\Dto\Save\ComponentDto:
   properties:
-    name:
-      - NotBlank: ~
-      - Length:
-          min: 1
-          minMessage: 'Выберите компонент'
-    order:
-      - NotBlank: ~
-      - Positive: ~
+    id:
+      - Uuid: ~
+    templateId:
+      - Uuid: ~
 
-Skyeng\MarketingCmsBundle\Domain\Entity\PageCustomMetaTag:
+Skyeng\MarketingCmsBundle\Application\Cms\Component\Dto\Save\SaveModelComponentsV1RequestDto:
   properties:
-    content:
+    modelId:
       - NotBlank: ~
+      - Uuid: ~
 
-Skyeng\MarketingCmsBundle\Domain\Entity\Page:
+# Template Component
+
+Skyeng\MarketingCmsBundle\Application\Cms\TemplateComponent\Dto\Save\SaveTemplateComponentsV1RequestDto:
   properties:
-    resource:
-      - Valid: ~
-    components:
-      - Valid: ~
-    customMetaTags:
-      - Valid: ~
+    templateId:
+      - NotBlank: ~
+      - Uuid: ~
+
+Skyeng\MarketingCmsBundle\Application\Cms\TemplateComponent\Dto\Save\ComponentDto:
+  properties:
+    id:
+      - Uuid: ~
 
 # Media
 
@@ -53,9 +49,12 @@ Skyeng\MarketingCmsBundle\Domain\Entity\MediaCatalog:
   constraints:
     - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: name
 
-Skyeng\MarketingCmsBundle\Domain\Entity\MediaFile:
+Skyeng\MarketingCmsBundle\Application\Cms\MediaFile\Dto\AddMediaFile\AddMediaFileV1RequestDto:
   properties:
     file:
-      - File: { maxSize: 20M, mimeTypes: [ image/jpeg, image/png, image/gif, application/pdf, video/mp4 ] }
+      - NotBlank: ~
+
+Skyeng\MarketingCmsBundle\Domain\Entity\MediaFile:
+  properties:
     catalog:
       - NotBlank: ~

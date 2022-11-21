@@ -4,18 +4,19 @@ declare(strict_types=1);
 
 namespace Skyeng\MarketingCmsBundle\Application\Cms\Redirect\Dto;
 
-use Swagger\Annotations as SWG;
+use OpenApi\Annotations as OA;
 
 /**
- * @SWG\Definition(
+ * @OA\Schema(
  *     required={"result"}
  * )
  */
 class GetRedirectsV1ResultDto
 {
     /**
-     * Редиректы
+     * Редиректы.
+     *
      * @var GetRedirectsV1ResultItemDto[]
      */
-    public $result;
+    public array $result = [];
 }

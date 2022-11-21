@@ -4,34 +4,25 @@ declare(strict_types=1);
 
 namespace Skyeng\MarketingCmsBundle\Tests\Builder;
 
+use Ramsey\Uuid\Uuid;
 use Skyeng\MarketingCmsBundle\Domain\Entity\Resource as ResourceEntity;
+use Skyeng\MarketingCmsBundle\Domain\Entity\ValueObject\Id;
 use Skyeng\MarketingCmsBundle\Domain\Entity\ValueObject\ResourceType;
 use Skyeng\MarketingCmsBundle\Domain\Entity\ValueObject\Uri;
-use Skyeng\MarketingCmsBundle\Domain\Entity\ValueObject\Id;
-use Ramsey\Uuid\Uuid;
 
 class ResourceBuilder
 {
-    /**
-     * @var Id
-     */
-    private $id;
+    private Id $id;
 
-    /**
-     * @var Uri
-     */
-    private $uri;
+    private Uri $uri;
 
-    /**
-     * @var ResourceType
-     */
-    private $type;
+    private ResourceType $type;
 
     private function __construct()
     {
         $this->id = new Id(Uuid::uuid4()->toString());
         $randomPath = Uuid::uuid4()->toString();
-        $this->uri = new Uri("/$randomPath");
+        $this->uri = new Uri(sprintf('/%s', $randomPath));
         $this->type = new ResourceType(ResourceType::FILE_TYPE);
     }
 
@@ -43,12 +34,14 @@ class ResourceBuilder
     public function withUri(Uri $uri): self
     {
         $this->uri = $uri;
+
         return $this;
     }
 
     public function withType(ResourceType $type): self
     {
         $this->type = $type;
+
         return $this;
     }
 

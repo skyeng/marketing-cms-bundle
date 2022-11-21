@@ -15,6 +15,7 @@ interface MediaCatalogRepositoryInterface
 
     /**
      * @return MediaCatalog[]
+     *
      * @throws MediaCatalogRepositoryException
      */
     public function getAll(): array;
@@ -24,4 +25,12 @@ interface MediaCatalogRepositoryInterface
      * @throws MediaCatalogNotFoundException
      */
     public function getFirst(): MediaCatalog;
+
+    /**
+     * @throws MediaCatalogRepositoryException
+     * @throws MediaCatalogNotFoundException
+     */
+    public function getByName(string $name): MediaCatalog;
+
+    public function save(MediaCatalog $mediaCatalog): void;
 }

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Skyeng\MarketingCmsBundle\Tests\Unit\Domain\Entity\ValueObject;
 
+use Codeception\Test\Unit;
 use Skyeng\MarketingCmsBundle\Domain\Entity\ValueObject\Uri;
 use Skyeng\MarketingCmsBundle\Domain\Exception\DomainException;
 use Skyeng\MarketingCmsBundle\Tests\UnitTester;
-use Codeception\Test\Unit;
 
 class UriTest extends Unit
 {
@@ -43,9 +43,7 @@ class UriTest extends Unit
         foreach ($paths as $path) {
             $this->tester->expectThrowable(
                 DomainException::class,
-                function () use ($path) {
-                    return new Uri($path);
-                }
+                static fn (): Uri => new Uri($path)
             );
         }
     }

@@ -4,22 +4,33 @@ declare(strict_types=1);
 
 namespace Skyeng\MarketingCmsBundle\Tests;
 
+use Codeception\Actor;
+use Codeception\Lib\Friend;
+use Skyeng\MarketingCmsBundle\Tests\_generated\ApiTesterActions;
+
 /**
- * Inherited Methods
- * @method void wantToTest($text)
- * @method void wantTo($text)
- * @method void execute($callable)
- * @method void expectTo($prediction)
- * @method void expect($prediction)
- * @method void amGoingTo($argumentation)
- * @method void am($role)
- * @method void lookForwardTo($achieveValue)
- * @method void comment($description)
- * @method \Codeception\Lib\Friend haveFriend($name, $actorClass = NULL)
+ * Inherited Methods.
+ *
+ * @method void   wantToTest($text)
+ * @method void   wantTo($text)
+ * @method void   execute($callable)
+ * @method void   expectTo($prediction)
+ * @method void   expect($prediction)
+ * @method void   amGoingTo($argumentation)
+ * @method void   am($role)
+ * @method void   lookForwardTo($achieveValue)
+ * @method void   comment($description)
+ * @method Friend haveFriend($name, $actorClass = null)
  *
  * @SuppressWarnings(PHPMD)
-*/
-class ApiTester extends \Codeception\Actor
+ */
+class ApiTester extends Actor
 {
-    use _generated\ApiTesterActions;
+    use ApiTesterActions;
+
+    public function haveJsonHeaders(): void
+    {
+        $this->haveHttpHeader('accept', 'application/json');
+        $this->haveHttpHeader('content-type', 'application/json');
+    }
 }

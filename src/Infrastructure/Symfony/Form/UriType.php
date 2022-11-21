@@ -5,36 +5,26 @@ declare(strict_types=1);
 namespace Skyeng\MarketingCmsBundle\Infrastructure\Symfony\Form;
 
 use Skyeng\MarketingCmsBundle\Domain\Entity\ValueObject\Uri;
-use Skyeng\MarketingCmsBundle\Domain\Repository\ResourceRepository\ResourceRepositoryInterface;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class UriType extends TextType
+class UriType extends AbstractType implements DataTransformerInterface
 {
-    /**
-     * @var ResourceRepositoryInterface
-     */
-    private $resourceRepository;
-
-    public function __construct(ResourceRepositoryInterface $resourceRepository)
-    {
-        $this->resourceRepository = $resourceRepository;
-    }
-
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        parent::buildForm($builder, $options);
         $builder->resetViewTransformers();
         $builder->addViewTransformer($this);
     }
 
-    public function transform($choice)
+    public function transform(mixed $value): string
     {
-        return (string)$choice;
+        return (string) $value;
     }
 
-    public function reverseTransform($value)
+    public function reverseTransform(mixed $value): Uri
     {
         if (!is_string($value)) {
             throw new TransformationFailedException('Expected a string.');
@@ -45,5 +35,23 @@ class UriType extends TextType
         }
 
         return new Uri($value);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            'compound' => false,
+        ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix(): string
+    {
+        return 'text';
     }
 }
